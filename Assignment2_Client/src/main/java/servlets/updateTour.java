@@ -56,7 +56,7 @@ HttpSession session = request.getSession(true);
 			slots = Integer.parseInt(slotsStr);
 			category = Integer.parseInt(categoryStr);
 			Class.forName("com.mysql.jdbc.Driver");
-			String connURL = "jdbc:mysql:// localhost:3306/assignment1?user=root&password=owlciitty&serverTimezone=UTC";
+			String connURL = "jdbc:mysql:// localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
 			Connection conn = DriverManager.getConnection(connURL);
 			String sqlStr = "UPDATE tour SET tour = ?, brief_desc = ?, detailed_desc = ?, price = ?, slots = ?, fk_category_id = ?,"
 					+ " tour_pic_url = ? WHERE tourid = ?";

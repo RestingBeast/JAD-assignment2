@@ -57,7 +57,7 @@ public class createTour extends HttpServlet {
 			   Class.forName("com.mysql.cj.jdbc.Driver");  //can be omitted for newer version of drivers
 			
 			   // Step 2: Define Connection URL
-			   String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=owlciitty&serverTimezone=UTC";
+			   String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
 			
 			   // Step 3: Establish connection to URL
 			   Connection conn = DriverManager.getConnection(connURL); 

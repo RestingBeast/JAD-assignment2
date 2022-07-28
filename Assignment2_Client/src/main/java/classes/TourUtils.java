@@ -7,7 +7,7 @@ public class TourUtils {
 	public static ArrayList<Tour> listProducts() throws Exception {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		   
-		String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=owlciitty&serverTimezone=UTC";
+		String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
 
         Connection conn = DriverManager.getConnection(connURL); 
 		
@@ -39,7 +39,7 @@ public class TourUtils {
 	public static ArrayList<Tour> getTourByCategory(int category_id) throws Exception {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		
-		String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=owlciitty&serverTimezone=UTC";
+		String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
 
         Connection conn = DriverManager.getConnection(connURL); 
 		
@@ -69,7 +69,7 @@ public class TourUtils {
 	public static Tour getTour(int id) throws Exception {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		
-		String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=owlciitty&serverTimezone=UTC";
+		String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
 		
 	    Connection conn = DriverManager.getConnection(connURL); 
 	        
@@ -100,7 +100,7 @@ public class TourUtils {
 	public static ArrayList<Tour> searchTour(String name) throws Exception{
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		
-		String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=owlciitty&serverTimezone=UTC";
+		String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
 		
 	    Connection conn = DriverManager.getConnection(connURL); 
 	    

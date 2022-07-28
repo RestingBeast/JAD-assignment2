@@ -45,7 +45,7 @@ public class deleteTour extends HttpServlet {
 		int tourid = Integer.parseInt(request.getParameter("tourid"));
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			String connURL = "jdbc:mysql:// localhost:3306/assignment1?user=root&password=owlciitty&serverTimezone=UTC";
+			String connURL = "jdbc:mysql:// localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
 			Connection conn = DriverManager.getConnection(connURL);
 			String sqlStr = "DELETE FROM tour WHERE tourid = ?";
 			PreparedStatement ps = conn.prepareStatement(sqlStr);
