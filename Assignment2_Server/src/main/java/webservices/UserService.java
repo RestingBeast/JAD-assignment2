@@ -18,6 +18,7 @@ public class UserService {
 	@Path("/getUser")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response findUser(@QueryParam("userid") int userid) {
+		// http://localhost:8080/Assignment2_Server/UserService/getUser?userid=1 (Can try in postman)
 		User user = new User();
 		try {
 			UserDAO db = new UserDAO();
