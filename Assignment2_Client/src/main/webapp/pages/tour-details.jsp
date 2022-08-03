@@ -40,7 +40,7 @@
         <section class="tour-two tour-list tour-details-two">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-8">
                         <div class="tour-details__content">
                             <div class="tour-two__top">
                                 <div class="tour-two__top-left">
@@ -60,10 +60,14 @@
                             <h3 class="tour-details__title">Overview</h3><!-- /.tour-details__title -->
                             <p><%= tour.getDetailedDescription() %></p>
                         </div><!-- /.tour-details__content -->
-                    </div><!-- /.col-lg-12 -->
+                    </div><!-- /.col-lg-8 -->
+                    <div class="col-lg-4">
+                    	
+                    </div>
                 </div><!-- /.row -->
                 <div class="row">
                 	<div class="col-lg-12">
+                		<div class="tour-details__spacer"></div><!-- /.tour-details__spacer -->
 						<h3 class="tour-details__title">Reviews Scores</h3><!-- /.tour-details__title -->
 						<div class="tour-details__review-score">
 						    <div class="tour-details__review-score-ave">

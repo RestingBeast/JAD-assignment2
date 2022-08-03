@@ -17,7 +17,7 @@ role_h=(String)session.getAttribute("sessRole"); %>
 		<div class="container">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="main-nav__logo-box">
-				<a href="../index.jsp" class="main-nav__logo">
+				<a href="./index.jsp" class="main-nav__logo">
 					<img src="../images/logo-light.png" class="main-logo" width="123"
 						alt="Awesome Image" />
 				</a>
@@ -47,7 +47,10 @@ role_h=(String)session.getAttribute("sessRole"); %>
 					<li>
 						<a href="./contact.jsp">Contact</a>
 					</li>
-
+					<li>
+						<a href="./cart.jsp">Cart</a>
+					</li>
+					
 					<% if (id_h !=null) { %>
 						<li>
 							<a href="./logout.jsp">Logout</a>
@@ -57,6 +60,7 @@ role_h=(String)session.getAttribute("sessRole"); %>
 								<a href="./login.jsp">Login</a>
 							</li>
 					<% } %>
+					
 				</ul>
 			</div> <!-- /.navbar-collapse -->
 		</div> <!-- /.container -->
