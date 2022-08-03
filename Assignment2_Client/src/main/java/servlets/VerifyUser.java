@@ -45,7 +45,7 @@ public class VerifyUser extends HttpServlet {
 		
 		try {
 			   // Step1: Load JDBC Driver
-			   Class.forName("com.mysql.cj.jdbc.Driver");  //can be omitted for newer version of drivers
+			   Class.forName("com.mysql.cj.jdbc.Driver");
 			
 			   // Step 2: Define Connection URL
 			   String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
