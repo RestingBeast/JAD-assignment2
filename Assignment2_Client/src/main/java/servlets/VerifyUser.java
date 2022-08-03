@@ -75,12 +75,12 @@ public class VerifyUser extends HttpServlet {
 			   
 			   if (userFound) {
 				   if (role.equals("Admin")) {
-					   response.sendRedirect("/Assignment1/pages/managetours.jsp");
+					   response.sendRedirect("/Assignment2_Client/pages/managetours.jsp");
 				   } else {
-					   response.sendRedirect("/Assignment1/pages/index.jsp");
+					   response.sendRedirect("/Assignment2_Client/pages/index.jsp");
 				   }
 			   } else {
-				   response.sendRedirect("/Assignment1/pages/login.jsp?code=invalidLogin");
+				   response.sendRedirect("/Assignment2_Client/pages/login.jsp?code=invalidLogin");
 			   }
 			   
 			} catch (Exception e) {

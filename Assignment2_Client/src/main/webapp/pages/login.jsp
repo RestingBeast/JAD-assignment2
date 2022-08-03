@@ -21,7 +21,7 @@
 		
 		<div id="login-form-wrap">
 			<h2>Login to <img src="../images/loader.png" width="30" class="main-logo" alt="Awesome Image"/>tripo</h2>
-			<form id="login-form" action="/Assignment1/servlets/VerifyUser" method="post">
+			<form id="login-form" action="/Assignment2_Client/servlets/VerifyUser" method="post">
 				<p>
 				  <input type="email" id="email" name="email" placeholder="Email Address" required />
 				</p>
