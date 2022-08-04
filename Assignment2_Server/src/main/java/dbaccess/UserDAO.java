@@ -46,4 +46,24 @@ public class UserDAO {
 		
 		return u;
 	}
+	
+	public static String getUserNameById(int i) throws Exception {
+		String name = "";
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		
+		String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
+
+        Connection conn = DriverManager.getConnection(connURL); 
+		
+		String sqlStr = "SELECT * FROM user WHERE userid = ?";
+		
+		PreparedStatement ps = conn.prepareStatement(sqlStr);
+		ps.setInt(1, i);
+
+		ResultSet rs = ps.executeQuery();
+		if (rs.next()) {
+			name = rs.getString("username");
+		}
+		return name;
+	}
 }
