@@ -62,8 +62,25 @@
                         </div><!-- /.tour-details__content -->
                     </div><!-- /.col-lg-8 -->
                     <div class="col-lg-4">
-                    	
-                    </div>
+                        <div class="tour-sidebar">
+                            <div class="tour-sidebar__search tour-sidebar__single">
+                                <h3>Book This Tour</h3>
+                                <form action="#" class="tour-sidebar__search-form">
+                                    <div class="input-group">
+                                        <input type="number" placeholder="Slots" min="1" max=<%= tour.getSlots() %>>
+                                    </div><!-- /.input-group -->
+                                    <div class="input-group">
+                                        <button type="submit" class="thm-btn">Book Now</button>
+                                    </div><!-- /.input-group -->
+                                </form>
+                            </div><!-- /.tour-sidebar__search -->
+                            <div class="offer-sidebar wow fadeInUp" data-wow-duration="1500ms" style="background-image: url(assets/images/backgrounds/offer-sidebar-bg.jpg);">
+                                <h3><span class="offer-sidebar__price">20%</span><!-- /.offer-sidebar__price --> Off <br>
+                                    On <span>Paris <br>
+                                        Tour</span></h3>
+                            </div><!-- /.offer-sidebar -->
+                        </div><!-- /.tour-sidebar -->
+                    </div><!-- /.col-lg-4 -->
                 </div><!-- /.row -->
                 <div class="row">
                 	<div class="col-lg-12">
@@ -81,36 +98,6 @@
 						            <div class="tour-details__review-score__bar-top">
 						                <h3><i class="fa fa-star"></i></h3>
 						                <p>50%</p>
-						            </div><!-- /.tour-details__review-score__bar-top -->
-						        </div><!-- /.tour-details__review-score__bar -->
-						        <div class="tour-details__review-score__bar">
-						            <div class="tour-details__review-score__bar-top">
-						                <h3><i class="fa fa-star"></i></h3>
-						                <p>87%</p>
-						            </div><!-- /.tour-details__review-score__bar-top -->
-						        </div><!-- /.tour-details__review-score__bar -->
-						        <div class="tour-details__review-score__bar">
-						            <div class="tour-details__review-score__bar-top">
-						                <h3><i class="fa fa-star"></i></h3>
-						                <p>63%</p>
-						            </div><!-- /.tour-details__review-score__bar-top -->
-						        </div><!-- /.tour-details__review-score__bar -->
-						        <div class="tour-details__review-score__bar">
-						            <div class="tour-details__review-score__bar-top">
-						                <h3><i class="fa fa-star"></i></h3>
-						                <p>34%</p>
-						            </div><!-- /.tour-details__review-score__bar-top -->
-						        </div><!-- /.tour-details__review-score__bar -->
-						        <div class="tour-details__review-score__bar">
-						            <div class="tour-details__review-score__bar-top">
-						                <h3><i class="fa fa-star"></i></h3>
-						                <p>22%</p>
-						            </div><!-- /.tour-details__review-score__bar-top -->
-						        </div><!-- /.tour-details__review-score__bar -->
-						        <div class="tour-details__review-score__bar">
-						            <div class="tour-details__review-score__bar-top">
-						                <h3><i class="fa fa-star"></i></h3>
-						                <p>70%</p>
 						            </div><!-- /.tour-details__review-score__bar-top -->
 						        </div><!-- /.tour-details__review-score__bar -->
 						    </div><!-- /.tour-details__review-score__content -->
@@ -134,7 +121,7 @@
 						        <div class="tour-details__review-form-stars">
 						            <div class="row">
 						                <div class="col-md-4">
-						                    <p><span>Services</span>
+						                    <p><span>Rating</span>
 						                        <i class="fa fa-star active"></i>
 						                    </p>
 						                </div><!-- /.col-md-4 -->
@@ -146,7 +133,7 @@
 						<h3 class="tour-details__title">Write a Review</h3><!-- /.tour-details__title -->
 						<div class="tour-details__review-form">
                                 <div class="tour-details__review-form-stars">
-                                    <form action="inc/sendemail.php" class="contact-one__form">
+                                    <form action="<%=request.getContextPath()%>/addReview" class="contact-one__form">
                                         <div class="row low-gutters">
                                             <div class="col-md-6">
                                                 <div class="input-group">

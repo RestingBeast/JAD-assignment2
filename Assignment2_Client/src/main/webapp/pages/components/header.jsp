@@ -29,7 +29,7 @@ role_h=(String)session.getAttribute("sessRole"); %>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="main-nav__main-navigation">
 				<ul class=" main-nav__navigation-box">
-					<li class="dropdown current">
+					<li class="dropdown">
 						<a href="./index.jsp">Home</a>
 					</li>
 					<li class="dropdown">
@@ -51,7 +51,7 @@ role_h=(String)session.getAttribute("sessRole"); %>
 						<a href="./cart.jsp">Cart</a>
 					</li>
 					
-					<% if (id_h !=null) { %>
+					<% if (id_h != null) { %>
 						<li>
 							<a href="./logout.jsp">Logout</a>
 						</li>
