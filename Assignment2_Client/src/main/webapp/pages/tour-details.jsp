@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="classes.Tour" %>
-<%@ page import="classes.TourUtils" %>
+<%@ page import="classes.*" %>
 <%@ page import="java.util.*" %>
 <!DOCTYPE html>
 <html>
@@ -62,24 +61,22 @@
                         </div><!-- /.tour-details__content -->
                     </div><!-- /.col-lg-8 -->
                     <div class="col-lg-4">
-                        <div class="tour-sidebar">
-                            <div class="tour-sidebar__search tour-sidebar__single">
-                                <h3>Book This Tour</h3>
-                                <form action="#" class="tour-sidebar__search-form">
-                                    <div class="input-group">
-                                        <input type="number" placeholder="Slots" min="1" max=<%= tour.getSlots() %>>
-                                    </div><!-- /.input-group -->
-                                    <div class="input-group">
-                                        <button type="submit" class="thm-btn">Book Now</button>
-                                    </div><!-- /.input-group -->
-                                </form>
-                            </div><!-- /.tour-sidebar__search -->
-                            <div class="offer-sidebar wow fadeInUp" data-wow-duration="1500ms" style="background-image: url(assets/images/backgrounds/offer-sidebar-bg.jpg);">
-                                <h3><span class="offer-sidebar__price">20%</span><!-- /.offer-sidebar__price --> Off <br>
-                                    On <span>Paris <br>
-                                        Tour</span></h3>
-                            </div><!-- /.offer-sidebar -->
-                        </div><!-- /.tour-sidebar -->
+						<div class="tour-sidebar">
+						    <div class="tour-sidebar__search tour-sidebar__single">
+						        <h3>Book This Tour</h3>
+						        <form action="<%=request.getContextPath()%>/addReview" class="tour-sidebar__search-form">
+						            <div class="input-group">
+						                <input type="number" placeholder="Slots" min="1" max=<%= tour.getSlots() %>>
+						            </div><!-- /.input-group -->
+						            <div class="input-group">
+						                <button type="submit" class="thm-btn">Book Now</button>
+						            </div><!-- /.input-group -->
+						        </form>
+						    </div><!-- /.tour-sidebar__search -->
+						    <div class="offer-sidebar wow fadeInUp" data-wow-duration="1500ms" style="background-image: url(assets/images/backgrounds/offer-sidebar-bg.jpg);">
+						        <h3><span class="offer-sidebar__price">20%</span><!-- /.offer-sidebar__price --> Off <br>On <span>Paris <br>Tour</span></h3>
+						    </div><!-- /.offer-sidebar -->
+						</div><!-- /.tour-sidebar -->
                     </div><!-- /.col-lg-4 -->
                 </div><!-- /.row -->
                 <div class="row">
@@ -102,33 +99,40 @@
 						        </div><!-- /.tour-details__review-score__bar -->
 						    </div><!-- /.tour-details__review-score__content -->
 						</div><!-- /.tour-details__review-score -->
-						
-						<div class="tour-details__review-comment">
-						    <div class="tour-details__review-comment-single">
-						        <div class="tour-details__review-comment-top">
-						            <img src="../images/tour/tour-review-1-1.jpg" alt="">
-						            <h3>Mike Hardson</h3>
-						            <p>06 Dec, 2019</p>
-						        </div><!-- /.tour-details__review-comment-top -->
-						        <div class="tour-details__review-comment-content">
-						            <h3>Fun Was To Discover This</h3>
-						            <p>Lorem ipsum is simply free text used by copytyping refreshing. Neque porro
-						                est qui
-						                dolorem ipsum quia quaed inventore veritatis et quasi architecto beatae
-						                vitae dicta
-						                sunt explicabo var lla sed sit amet finibus eros.</p>
-						        </div><!-- /.tour-details__review-comment-content -->
-						        <div class="tour-details__review-form-stars">
-						            <div class="row">
-						                <div class="col-md-4">
-						                    <p><span>Rating</span>
-						                        <i class="fa fa-star active"></i>
-						                    </p>
-						                </div><!-- /.col-md-4 -->
-						            </div><!-- /.row -->
-						        </div><!-- /.tour-details__review-form-stars -->
-						    </div><!-- /.tour-details__review-comment-single -->
-						</div><!-- /.tour-details__review-comment -->
+						        <%
+						        	// @SuppressWarnings("unchecked")
+						        	// ArrayList<Review> reviewArr = (ArrayList<Review>) request.getAttribute("reviewArray");
+						        	ArrayList<Review> reviewArr = ReviewUtils.getReviewsByTour(tour.getId());
+						        %>
+						        	<% if (reviewArr != null) { %>
+						        	<%	for (Review r: reviewArr) { %>
+								<div class="tour-details__review-comment">
+								    <div class="tour-details__review-comment-single">
+								        <div class="tour-details__review-comment-top">
+								            <img src="../images/tour/tour-review-1-1.jpg" alt="">
+								            <h3>Mike Hardson</h3>
+								            <p>06 Dec, 2019</p>
+						        		</div><!-- /.tour-details__review-comment-top -->
+						        		
+						        		<div class="tour-details__review-comment-content">
+								            <h3>Fun Was To Discover This</h3>
+								            <p><%= r.getReviewDesc() %></p>
+								        </div><!-- /.tour-details__review-comment-content -->
+								        
+								        <div class="tour-details__review-form-stars">
+								            <div class="row">
+								                <div class="col-md-4">
+								                    <p><span>Rating</span>
+								                        <i class="fa fa-star active"></i>
+								                    </p>
+								                </div><!-- /.col-md-4 -->
+								            </div><!-- /.row -->
+						        		</div><!-- /.tour-details__review-form-stars -->
+						        	</div><!-- /.tour-details__review-comment-single -->
+								</div><!-- /.tour-details__review-comment -->
+						        <%		}
+						        	}
+						        %>
 						
 						<h3 class="tour-details__title">Write a Review</h3><!-- /.tour-details__title -->
 						<div class="tour-details__review-form">

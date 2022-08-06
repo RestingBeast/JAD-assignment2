@@ -14,7 +14,7 @@ public class ReviewDAO {
 			String connURL = "jdbc:mysql://localhost:3306/db1?user=root&password=Root1234-&serverTimezone=UTC";
 			conn = DriverManager.getConnection(connURL);
 
-			String sqlStr = "SELECT * FROM reviews WHERE fk_tour_id = ?";
+			String sqlStr = "SELECT r.* , t.tourid, t.tour FROM reviews r  INNER JOIN tour t ON tourid = fk_tour_id WHERE fk_tour_id = ?;";
 			
 			PreparedStatement ps = conn.prepareStatement(sqlStr);
 			ps.setInt(1, tid);
