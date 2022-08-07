@@ -182,9 +182,6 @@
 						</div>
 		        	</div>
 		        </fieldset>
-		        <div class="form-group row">
-				  <label for="picture" class="col-md-2 col-form-label">Tour Picture URL:</label>
-		        </div>
 		        <%
 		        	if (request.getParameter("errCode") != null) {
 		        		String errCode = request.getParameter("errCode");

@@ -29,6 +29,26 @@ public class ServeImage extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FileNotFoundException {
 		// TODO Auto-generated method stub
+		try {
+			String action = request.getParameter("action");
+			
+			if (action == null) {
+				tourPicture(request, response);
+			} else {
+				if (action.equalsIgnoreCase("user")) {
+					userPicture(request, response);
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("Exception: " + e.getMessage());
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void tourPicture(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
 		String picture = request.getParameter("picture");
 		response.setContentType("image/jpeg");
         FileInputStream fis = new FileInputStream("D:\\KKZ\\School\\Y2Sem1\\J2EE\\CA2\\"
@@ -37,13 +57,22 @@ public class ServeImage extends HttpServlet {
         fis.transferTo(response.getOutputStream());
         fis.close();
 	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+	
+	protected void userPicture(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		String picture = request.getParameter("picture");
+		response.setContentType("image/jpeg");
+        FileInputStream fis = new FileInputStream("D:\\KKZ\\School\\Y2Sem1\\J2EE\\CA2\\"
+        		+ "JAD-assignment2\\Assignment2_Client\\src\\main\\webapp\\images\\user\\" + picture);
+        System.out.println("served");
+        fis.transferTo(response.getOutputStream());
+        fis.close();
+	}
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
+	
 
 }
