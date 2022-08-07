@@ -162,4 +162,112 @@ public class TourDAO {
 		}
 		return tours;
 	}
+	
+	public int createTour(String tour, String b_desc, String d_desc, double price, int slots, int catid, String pic_url) {
+		Connection conn = null;
+		int rowsAffected = -1;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			
+			String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
+			
+			conn = DriverManager.getConnection(connURL);
+			
+			String sqlStr = "INSERT INTO tour (tour, brief_desc, detailed_desc, price, slots, fk_category_id, tour_pic_url) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
+			
+			PreparedStatement ps = conn.prepareStatement(sqlStr);
+			ps.setString(1, tour);
+			ps.setString(2, b_desc);
+			ps.setString(3, d_desc);
+			ps.setDouble(4, price);
+			ps.setInt(5, slots);
+			ps.setInt(6, catid);
+			ps.setString(7, pic_url);
+			
+			rowsAffected = ps.executeUpdate();
+		}
+		catch (Exception e) {
+			System.out.println("Exception :" + e);
+		} finally {
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (Exception e) {
+				System.out.println("Closing error :" + e);
+			}
+		}
+		return rowsAffected;
+	}
+	
+	public int deleteTour(int tourid) {
+		Connection conn = null;
+		int rowsAffected = -1;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			
+			String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
+			
+			conn = DriverManager.getConnection(connURL);
+			
+			String sqlStr = "DELETE FROM tour WHERE tourid = ?";
+			
+			PreparedStatement ps = conn.prepareStatement(sqlStr);
+			ps.setInt(1, tourid);
+			
+			rowsAffected = ps.executeUpdate();
+		}
+		catch (Exception e) {
+			System.out.println("Exception :" + e);
+		} finally {
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (Exception e) {
+				System.out.println("Closing error :" + e);
+			}
+		}
+		return rowsAffected;
+	}
+	
+	public int updateTour(int tourid, String tour, String b_desc, String d_desc, double price, int slots, int catid, String pic_url) {
+		Connection conn = null;
+		int rowsAffected = -1;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			
+			String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
+			
+			conn = DriverManager.getConnection(connURL);
+			
+			String sqlStr = "UPDATE tour SET tour = ?, brief_desc = ?, detailed_desc = ?, price = ?, slots = ?, fk_category_id = ?, "
+					+ "tour_pic_url = ? WHERE tourid = ?";
+			
+			PreparedStatement ps = conn.prepareStatement(sqlStr);
+			ps.setString(1, tour);
+			ps.setString(2, b_desc);
+			ps.setString(3, d_desc);
+			ps.setDouble(4, price);
+			ps.setInt(5, slots);
+			ps.setInt(6, catid);
+			ps.setString(7, pic_url);
+			ps.setInt(8, tourid);
+			
+			rowsAffected = ps.executeUpdate();
+		}
+		catch (Exception e) {
+			System.out.println("Exception :" + e);
+		} finally {
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (Exception e) {
+				System.out.println("Closing error :" + e);
+			}
+		}
+		return rowsAffected;
+	}
 }
