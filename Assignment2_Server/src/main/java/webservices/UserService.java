@@ -118,7 +118,7 @@ public class UserService {
 	@DELETE
 	@Path("/deleteUser")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response deleteTour(@QueryParam("userid") String useridStr) {
+	public Response deleteUser(@QueryParam("userid") String useridStr) {
 		int userid = Integer.parseInt(useridStr);
 		int rowsAffected = -1;
 		String jsonOutput = "";
@@ -141,7 +141,7 @@ public class UserService {
 	@Path("/updateUser")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response updateTour(@QueryParam("userid") String useridStr, String inputData) {
+	public Response updateUser(@QueryParam("userid") String useridStr, String inputData) {
 		int userid = Integer.parseInt(useridStr);
 		int rowsAffected = -1;
 		String jsonOutput="";
