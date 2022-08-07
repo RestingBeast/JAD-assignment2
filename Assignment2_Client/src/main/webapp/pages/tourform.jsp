@@ -30,7 +30,7 @@
 			}
 		%>
 		<%
-			String tour = "", b_desc = "", d_desc = "", picture = "../images/tour/";
+			String tour = "", b_desc = "", d_desc = "", picture = "";
 			double price = 0; int slots = 0, category = -1, tourid = -1;
 		%>
 		<%
@@ -48,10 +48,10 @@
 						tour = rs.getString("tour");
 						b_desc = rs.getString("brief_desc");
 						d_desc = rs.getString("detailed_desc");
-						picture += rs.getString("tour_pic_url");
 						price = rs.getDouble("price");
 						slots = rs.getInt("slots");
 						category = rs.getInt("fk_category_id");
+						picture = rs.getString("tour_pic_url");
 					}
 				} catch (Exception e){
 					System.out.println("Exception: " + e);
@@ -59,14 +59,14 @@
 			}
 			
 			if (request.getParameter("pic_url") != null) {
-				picture = "D:\\KKZ\\School\\Y2Sem1\\J2EE\\CA2\\" + request.getParameter("pic_url");
+				picture = request.getParameter("pic_url");
 				System.out.println(picture);
 			}
 		%>
 		<div class="form">
 			<h2 class="h2" style="text-align: center;">Tour Form</h2>
 			<div class="form-group row" >
-				<div class="image-center"><img src="<%= picture %>" alt="" ></div>		
+				<div class="image-center"><img src="/Assignment2_Client/ServeImage?picture=<%= picture%>" alt="" ></div>		
 			</div>
 			<form method="post"action="/Assignment2_Client/FileUploadServlet" enctype="multipart/form-data" >
 				<div class="form-group row">
@@ -83,8 +83,9 @@
 			         <div class="col-md-2"></div>
 				</div>	
 			</form>
-			<form  method="post" action="/Assignment2_Client/CreateTour">
+			<form  method="post" action="/Assignment2_Client/TourServlet">
 				<div class="form-group row">
+					<input class="no-display" type="text" id="pic_url" name="pic_url" value="<%=picture%>" readonly >
 				  <label for="tourname" class="col-md-2 col-form-label">Tour Name:</label>
 				  <div class="col-md-10">
 					  <input
@@ -204,7 +205,7 @@
 		        	</div>
 				    <div class="col-md-10">
 				      <% if (tourid != -1){ %>
-				      		<button type="submit" formaction="/Assignment2_Client/servlets/updateTour?tourid=<%=tourid%>" class="btn btn-primary mr-4">Update</button>
+				      		<button type="submit" formaction="/Assignment2_Client/TourServlet?action=update&tourid=<%=tourid%>" class="btn btn-primary mr-4">Update</button>
 				      <% } else { %>
 				      		<button type="submit" class="btn btn-primary mr-4">Create</button>
 				      <%}

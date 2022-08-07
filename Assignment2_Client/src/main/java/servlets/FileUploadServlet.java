@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import javax.servlet.RequestDispatcher;
 
 /**
  * Servlet implementation class FileUploadServlet
@@ -45,16 +44,24 @@ public class FileUploadServlet extends HttpServlet {
 		}
 		Part filePart = request.getPart("picture");
 		if (filePart != null) {
-			String fileName = filePart.getSubmittedFileName();
-		    String filePath = "D:\\KKZ\\School\\Y2Sem1\\J2EE\\CA2\\"+ fileName;
-		    for (Part part : request.getParts()) {
-		      part.write(filePath);
-		    }
-		    url += "?pic_url=" + fileName;
-		    if (tourid != 0) {
-		    	url += "&tourid=" + tourid;
-		    }
-		    response.sendRedirect(url);
+			try {
+				String fileName = filePart.getSubmittedFileName();
+			    String filePath = "D:\\KKZ\\School\\Y2Sem1\\J2EE\\CA2\\JAD-assignment2\\Assignment2_Client\\src\\main\\webapp\\images\\tour\\"+ fileName;
+			    for (Part part : request.getParts()) {
+			      part.write(filePath);
+			    }
+			    if (tourid != 0) {
+			    	url += "&tourid=" + tourid;
+			    }
+			} catch (Exception e) {
+				if (tourid != 0) {
+			    	url += "?tourid=" + tourid;
+			    }
+			} finally {
+				
+				response.sendRedirect(url);
+			}
+		    
 		} else {
 			if (tourid != 0) {
 		    	url += "?tourid=" + tourid;

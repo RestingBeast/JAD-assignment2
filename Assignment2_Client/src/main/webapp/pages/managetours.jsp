@@ -13,6 +13,7 @@
 </head>
 <body>
 	<%
+		System.out.println("You are at MangeTour");
 		ArrayList<Tour> tourlist = new ArrayList<Tour>();
 		Client client = ClientBuilder.newClient();
 		String restUrl = "http://localhost:8080/Assignment2_Server/TourService";
@@ -25,7 +26,7 @@
 		System.out.println("Status :" + resp.getStatus());
 		
 		if(resp.getStatus() == Response.Status.OK.getStatusCode()) {
-			System.out.println("Success");
+			System.out.println("Successful Retrieval");
 			tourlist = resp.readEntity(new GenericType<ArrayList<Tour>>() {});
 		}
 	%>
@@ -82,7 +83,7 @@
 						<%= CategoryUtils.getCategoryName(tourlist.get(i).getCategoryID()) %>
 					</div>
 					<div class="col-md-2">
-						<form action="../servlets/deleteTour?tourid=<%=tourlist.get(i).getId() %>" method="post">
+						<form action="../TourServlet?action=delete&tourid=<%=tourlist.get(i).getId() %>" method="post">
 							<button 
 								type="button"
 								class="btn btn-primary" 
