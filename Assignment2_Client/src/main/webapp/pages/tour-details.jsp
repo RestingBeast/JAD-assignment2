@@ -68,6 +68,15 @@
 						            <div class="input-group">
 						                <input type="number" name="slots" placeholder="Slots" min="1" max=<%= tour.getSlots() %>>
 						            </div><!-- /.input-group -->
+						            
+						            <% 	String error = (String) request.getSession().getAttribute("error"); %>
+						            
+						            <% if (error != null && !error.equals("")) { %>
+						            		<p><label class="form-label text-danger"><%= error %></label></p>
+						            <%	} %>
+						            
+						            <% request.getSession().removeAttribute("error"); %>
+						            
 						            <div class="input-group">
 						                <input type="submit" class="thm-btn" value="Book Now" />
 						            </div><!-- /.input-group -->

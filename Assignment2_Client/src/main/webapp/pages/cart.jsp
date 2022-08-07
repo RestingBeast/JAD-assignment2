@@ -21,10 +21,8 @@
 </head>
 <body>
 	<% 	
-		// session.invalidate();
-		@SuppressWarnings("unchecked")
+		String error = (String) session.getAttribute("error");
 		ArrayList<Tour> cart =  (ArrayList<Tour>) session.getAttribute("cart"); 
-		@SuppressWarnings("unchecked")	
 		ArrayList<Integer> slots = (ArrayList<Integer>) session.getAttribute("slotsArr");
 	%>
 	
@@ -41,6 +39,16 @@
 				</ul><!-- /.thm-breadcrumb -->
 			</div><!-- /.container -->
 		</section><!-- /.tour-details__header -->
+	
+		<% if (error != null && !error.equals("")) { %>
+			<section style="padding-bottom:0px" class="tour-one tour-grid">
+				<div class="container">
+					<div class="tour-sorter-one">
+							<h3><%= error %></h3>
+					</div><!-- /.tour-sorter-one -->
+				</div>
+			</section>
+		<% } %>
 	
 		<% if (cart != null && cart.size() != 0 && 
 			slots != null && slots.size() != 0 ) { %>

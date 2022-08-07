@@ -40,6 +40,7 @@ public class CartServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
+		
 		try {
 			String action = request.getParameter("action");
 			
@@ -66,55 +67,31 @@ public class CartServlet extends HttpServlet {
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
-		if (session.getAttribute("cart") == null) {
-			String id = request.getParameter("id");
-			int slots = Integer.parseInt(request.getParameter("slots"));
+		String tid = request.getParameter("id");
+		
+		try {
+			String slotsStr = request.getParameter("slots");
 			
-			List<Tour> cart = new ArrayList<Tour>();
-			List<Integer> slotsArr = new ArrayList<Integer>();
-			
-			Client client = ClientBuilder.newClient();
-			String restUrl = "http://localhost:8080/Assignment2_Server/TourService";
-			WebTarget target = client
-					.target(restUrl)
-					.path("findTourById")
-					.queryParam("tourid", id);
-			Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
-			Response resp = invocationBuilder.get();
-			System.out.println("Status: " + resp.getStatus());
-			
-			if (resp.getStatus() == Response.Status.OK.getStatusCode()) {
-				System.out.println("success");
+			if (slotsStr.equals("")) {
 				
-				Tour tour = resp.readEntity(Tour.class);
-				if (tour != null) {
-					System.out.println("Id: " + tour.getId());
-					System.out.println("Name: " + tour.getName());
-					System.out.println("Price: " + tour.getPrice());
-					System.out.println("Slots: " + tour.getSlots());
-					
-					cart.add(tour);
-					slotsArr.add(slots);
-					session.setAttribute("cart", cart);
-					session.setAttribute("slotsArr", slotsArr);
-				} else {
-					System.out.println("idk");
-				}
-			} else {
-				System.out.println("failed1");
+				session.setAttribute("error", "Slots is invalid.");
+				response.sendRedirect("/Assignment2_Client/pages/tour-details.jsp?tourid="
+						+ tid);
+				
+				return;
 			}
-		} else {
-			@SuppressWarnings("unchecked")
+			
+			int slots = Integer.parseInt(slotsStr);
+			
+			
 			List<Tour> cart = (List<Tour>) session.getAttribute("cart");
-			
-			@SuppressWarnings("unchecked")
 			List<Integer> slotsArr = (List<Integer>) session.getAttribute("slotsArr");
-			String tid = request.getParameter("id");
 			
-			int slots = Integer.parseInt(request.getParameter("slots"));
-			int index = isExisting(tid, cart);
-			
-			if (index == -1) {
+			if (cart == null) {
+				
+				cart = new ArrayList<Tour>();
+				slotsArr = new ArrayList<Integer>();
+				
 				Client client = ClientBuilder.newClient();
 				String restUrl = "http://localhost:8080/Assignment2_Server/TourService";
 				WebTarget target = client
@@ -123,6 +100,7 @@ public class CartServlet extends HttpServlet {
 						.queryParam("tourid", tid);
 				Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
 				Response resp = invocationBuilder.get();
+				System.out.println("Status: " + resp.getStatus());
 				
 				if (resp.getStatus() == Response.Status.OK.getStatusCode()) {
 					System.out.println("success");
@@ -136,28 +114,70 @@ public class CartServlet extends HttpServlet {
 						
 						cart.add(tour);
 						slotsArr.add(slots);
+						session.setAttribute("cart", cart);
+						session.setAttribute("slotsArr", slotsArr);
 					} else {
-						System.out.println("Tour not found");
+						session.setAttribute("error", "Tour in wrong format.");
 					}
 				} else {
-					System.out.println("failed2");
+					session.setAttribute("error", "Tour not found.");
 				}
 			} else {
-				int updatedSlots = slotsArr.get(index) + slots;
-				slotsArr.set(index, updatedSlots);
+				
+				int index = isExisting(tid, cart);
+				
+				if (index == -1) {
+					Client client = ClientBuilder.newClient();
+					String restUrl = "http://localhost:8080/Assignment2_Server/TourService";
+					WebTarget target = client
+							.target(restUrl)
+							.path("findTourById")
+							.queryParam("tourid", tid);
+					Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+					Response resp = invocationBuilder.get();
+					
+					if (resp.getStatus() == Response.Status.OK.getStatusCode()) {
+						System.out.println("success");
+						
+						Tour tour = resp.readEntity(Tour.class);
+						if (tour != null) {
+							System.out.println("Id: " + tour.getId());
+							System.out.println("Name: " + tour.getName());
+							System.out.println("Price: " + tour.getPrice());
+							System.out.println("Slots: " + tour.getSlots());
+							
+							cart.add(tour);
+							slotsArr.add(slots);
+						} else {
+							session.setAttribute("error", "Tour in wrong format.");
+						}
+					} else {
+						session.setAttribute("error", "Tour not found.");
+					}
+				} else {
+					int updatedSlots = slotsArr.get(index) + slots;
+					slotsArr.set(index, updatedSlots);
+				}
+				
+				session.setAttribute("cart", cart);
+				session.setAttribute("slotsArr", slotsArr);
 			}
 			
-			session.setAttribute("cart", cart);
-			session.setAttribute("slotsArr", slotsArr);
-		}
-		
-		response.sendRedirect(request.getContextPath() + "/pages/cart.jsp");
+			response.sendRedirect(request.getContextPath() + "/pages/cart.jsp");
+			
+		} catch (NumberFormatException e) {
+			session.setAttribute("error", "Slots is invalid.");
+			
+			response.sendRedirect(request.getContextPath() + "/pages/tour-details.jsp");
+			
+			return;
+		} 
 	}
 	
 	protected void doGet_Remove(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
+		
 		HttpSession session = request.getSession();
-		@SuppressWarnings("unchecked")
 		List<Tour> cart = (List<Tour>) session.getAttribute("cart");
 		
 		int index = isExisting(request.getParameter("id"), cart);
