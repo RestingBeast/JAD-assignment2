@@ -68,7 +68,7 @@
 	<section class="page-header"
 		style="background-image: url(../images/backgrounds/category-0.jpg);">
 		<div class="container">
-			<h2>Checkout form</h2>
+			<h2>Checkout Form</h2>
 			<ul class="thm-breadcrumb list-unstyled">
 				<li><a href="cart.jsp">Cart</a></li>
 				<li><span>Checkout</span></li>
@@ -110,18 +110,18 @@
 		    
 		    <div class="col-md-8 order-md-1">
 		      <h4 class="mb-3">Billing address</h4>
-		      <form action="/Assignment2_Client/booking&userid=<%=user.getUserId()%>" class="needs-validation" novalidate>
+		      <form action="/Assignment2_Client/checkout" method="post" class="needs-validation" novalidate>
 		        <div class="row">
 		          <div class="col-md-6 mb-3">
 		            <label for="firstName">First name</label>
-		            <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+		            <input type="text" class="form-control" name="firstName" placeholder="" value="" required>
 		            <div class="invalid-feedback">
 		              Valid first name is required.
 		            </div>
 		          </div>
 		          <div class="col-md-6 mb-3">
 		            <label for="lastName">Last name</label>
-		            <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+		            <input type="text" class="form-control" name="lastName" placeholder="" value="" required>
 		            <div class="invalid-feedback">
 		              Valid last name is required.
 		            </div>
@@ -147,12 +147,12 @@
 		
 		        <div class="mb-3">
 		          <label for="address2">Phone Number <span class="text-muted"></span></label>
-		          <input type="text" class="form-control" id="phoneNumber" placeholder="Personal Phone Number">
+		          <input type="text" class="form-control" name="phoneNumber" placeholder="Personal Phone Number">
 		        </div>
 		        
 		        <div class="mb-3">
 		          <label for="address">Address</label>
-		          <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
+		          <input type="text" class="form-control" name="address" placeholder="1234 Main St" required>
 		          <div class="invalid-feedback">
 		            Please enter your shipping address.
 		          </div>
@@ -161,7 +161,7 @@
 		        <div class="row">
 		          <div class="col-md-3 mb-3">
 		            <label for="zip">Zip</label>
-		            <input type="text" class="form-control" id="zip" placeholder="" required>
+		            <input type="text" class="form-control" name="zip" placeholder="" required>
 		            <div class="invalid-feedback">
 		              Zip code required.
 		            </div>

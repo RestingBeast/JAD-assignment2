@@ -4,6 +4,53 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class PaymentInfoDAO {
+	public ArrayList<PaymentInfo> listAllPayments() {
+		ArrayList<PaymentInfo> payments = new ArrayList<PaymentInfo>();
+		PaymentInfo p = null;
+		Connection conn = null;
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			
+			String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
+			
+			conn = DriverManager.getConnection(connURL);
+			
+			String sqlStr = "SELECT * FROM payment";
+			
+			PreparedStatement ps = conn.prepareStatement(sqlStr);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if (rs.next()) {
+				p = new PaymentInfo();
+		
+				p.setId(rs.getInt("payment_id"));
+				p.setUserid(rs.getInt("fk_user_id"));
+				p.setFullname(rs.getString("full_name"));
+				p.setPhone(rs.getString("phone_number"));
+				p.setAddress(rs.getString("address"));
+				p.setZip(rs.getString("zip"));
+				p.setPayment(rs.getDouble("payment"));
+				
+				payments.add(p);
+			}
+		} catch (Exception e) {
+			System.out.print("Exception: " + e);
+		} finally {
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			}
+			catch(Exception e) {
+				System.out.println("Closing error :" + e);
+			}
+		}
+		
+		return payments;
+	}
+	
 	public PaymentInfo findById(int userid) {
 		PaymentInfo u = null;
 		Connection conn = null;
@@ -91,5 +138,40 @@ public class PaymentInfoDAO {
 			}
 		}
 		return pInfos;
+	}
+	
+	public int insertPayment(int uid, String name, String phone, String address, String zip, double price) {
+		Connection conn = null;
+		int rowsAffected = -1;
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
+			conn = DriverManager.getConnection(connURL);
+			
+			String sqlStr = "INSERT INTO payment (fk_user_id, full_name, phone_number, address, zip, payment) VALUES (?, ?, ?, ?, ?, ?)";
+			PreparedStatement ps = conn.prepareStatement(sqlStr);
+			
+			ps.setInt(1, uid);
+			ps.setString(2, name);
+			ps.setString(3, phone);
+			ps.setString(4, address);
+			ps.setString(5, zip);
+			ps.setDouble(6, price);
+			
+			rowsAffected = ps.executeUpdate();
+		}  catch (Exception e) {
+			System.out.print("Exception: " + e);
+		} finally {
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (Exception e) {
+				System.out.println("Closing error :" + e);
+			}
+		}
+		
+		return rowsAffected;
 	}
 }
