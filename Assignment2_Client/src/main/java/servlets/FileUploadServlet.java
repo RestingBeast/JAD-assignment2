@@ -47,11 +47,13 @@ public class FileUploadServlet extends HttpServlet {
 				if (action.equalsIgnoreCase("user")) {
 					userPicture(request, response);
 				}
+				if (action.equalsIgnoreCase("userform")) {
+					userPictureForm(request, response);
+				}
 			}
 		} catch (Exception e) {
 			System.out.println("Exception: " + e.getMessage());
-		}
-		
+		}	
 	}
 	
 	protected void tourPicture(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -120,6 +122,49 @@ public class FileUploadServlet extends HttpServlet {
 		} else {
 			response.sendRedirect("/Assignment2_Client/pages/register.jsp");
 			System.out.println("Here 3");
+		}
+	}
+	
+	protected void userPictureForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		String url = "http://localhost:8080/Assignment2_Client/pages/userform.jsp";
+		String useridPart = request.getParameter("userid");
+		System.out.println(useridPart + " Start");
+		int userid = 0;
+		if (!useridPart.equals("-1")) {
+			userid = Integer.parseInt(useridPart);
+		}
+		Part filePart = request.getPart("picture");
+		if (filePart != null) {
+			try {
+				String fileName = filePart.getSubmittedFileName();
+			    String filePath = "D:\\KKZ\\School\\Y2Sem1\\J2EE\\CA2\\JAD-assignment2\\Assignment2_Client\\src\\main\\webapp\\images\\user\\"+ fileName;
+			    for (Part part : request.getParts()) {
+			      part.write(filePath);
+			    }
+			    url+= "?pic_url="+fileName;
+			    System.out.println("Here 1" + url);
+			    if (userid != 0) {
+			    	url += "&userid=" + userid;
+			    	System.out.println("Here 2" + url);
+			    }
+			} catch (Exception e) {
+				if (userid != 0) {
+			    	url += "?userid=" + userid;
+			    }
+				System.out.println("Here 3" + url);
+			} finally {
+				System.out.println("Here 4" + url);
+				response.sendRedirect(url);
+			}
+		    
+		} else {
+			if (userid != 0) {
+		    	url += "?userid=" + userid;
+		    	System.out.println("Here 5" + url);
+		    }
+			response.sendRedirect(url);
+			System.out.println("Here 6" + url);
 		}
 	}
 

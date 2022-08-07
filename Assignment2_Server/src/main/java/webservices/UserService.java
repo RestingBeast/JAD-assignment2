@@ -72,9 +72,10 @@ public class UserService {
 			
 			JsonObject inputJSONObj = jsonReader.readObject();
 			
-			String name = inputJSONObj.getString("name");
+			String name = inputJSONObj.getString("username");
 			String email = inputJSONObj.getString("email");
 			String password = inputJSONObj.getString("password");
+			String role = inputJSONObj.getString("role");
 			String pfp = inputJSONObj.getString("profile_pic_url");
 			
 			// data validation (To check if data is feasible or not)
@@ -82,7 +83,7 @@ public class UserService {
 			
 			UserDAO db = new UserDAO();
 			
-			rowsAffected = db.createUser(name, email, null ,password, pfp);
+			rowsAffected = db.createUser(name, email, password, role, pfp);
 			jsonOutput = "{\"rows affected\" : \"" + rowsAffected + "\"" + "}";
 			
 		} catch (JsonParsingException e) {
@@ -110,7 +111,7 @@ public class UserService {
 		}
 		
 		return Response
-				.status(Response.Status.OK)
+				.status(Response.Status.CREATED)
 				.entity(jsonOutput)
 				.build();
 	}
@@ -150,7 +151,7 @@ public class UserService {
 			
 			JsonObject inputJSONObj = jsonReader.readObject();
 			
-			String name = inputJSONObj.getString("name");
+			String name = inputJSONObj.getString("username");
 			String email = inputJSONObj.getString("email");
 			String password = inputJSONObj.getString("password");
 			String role = inputJSONObj.getString("role");

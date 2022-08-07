@@ -13,7 +13,7 @@ public class UserDAO {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			
-			String connURL = "jdbc:mysql://localhost:3306/assignment2?user=root&password=Root1234-&serverTimezone=UTC";
+			String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
 			
 			conn = DriverManager.getConnection(connURL);
 			
@@ -98,13 +98,7 @@ public class UserDAO {
 	public int createUser(String name, String email, String pwd, String role, String pfp) {
 		Connection conn = null;
 		int rowsAffected = -1;
-		try {
-			if (role != null) {
-				role = "Admin";
-			} else {
-				role = "Member";
-			}
-			
+		try {	
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			
 			String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
@@ -169,6 +163,7 @@ public class UserDAO {
 	
 	public int updateUser(int uid, String name, String email, String pwd, String role, String pfp) {
 		Connection conn = null;
+		System.out.println(uid + name + email + pwd + role + pfp);
 		int rowsAffected = -1;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");

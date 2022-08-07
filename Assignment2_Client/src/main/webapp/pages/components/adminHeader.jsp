@@ -37,7 +37,7 @@
 						</ul>
 					</li>
 					<li>
-						<a href="./managecustomer.jsp">Customer</a>
+						<a href="./managecustomers.jsp">Customer</a>
 					</li>
 					
 					<% if (id_h != null) { %>

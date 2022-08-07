@@ -13,35 +13,35 @@
 </head>
 <body>
 	<%
-		System.out.println("You are at MangeTour");
-		ArrayList<Tour> tourlist = new ArrayList<Tour>();
-		Client client = ClientBuilder.newClient();
-		String restUrl = "http://localhost:8080/Assignment2_Server/TourService";
-		WebTarget target = client
-				.target(restUrl)
-				.path("getAllTours");
-		
-		Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
-		Response resp = invocationBuilder.get();
-		System.out.println("Status :" + resp.getStatus());
-		
-		if(resp.getStatus() == Response.Status.OK.getStatusCode()) {
-			System.out.println("Successful Retrieval");
-			tourlist = resp.readEntity(new GenericType<ArrayList<Tour>>() {});
+		String userId = (String)session.getAttribute("sessUserID");
+		String role = (String)session.getAttribute("sessRole");
+		System.out.println(userId + role);
+		if (role == null || !role.equals("Admin")){
+			response.sendRedirect("./error/401.html");
+			return;
 		}
 	%>
-
 	<div class="page-wrapper">
 		<%@ include file="./components/adminHeader.jsp" %>
 		<%
-			String userId = (String)session.getAttribute("sessUserID");
-			String role = (String)session.getAttribute("sessRole");
-			System.out.println(userId + role);
-			if (role == null || !role.equals("Admin")){
-				response.sendRedirect("./error/401.html");
-				return;
+			System.out.println("You are at MangeTour");
+			ArrayList<Tour> tourlist = new ArrayList<Tour>();
+			Client client = ClientBuilder.newClient();
+			String restUrl = "http://localhost:8080/Assignment2_Server/TourService";
+			WebTarget target = client
+					.target(restUrl)
+					.path("getAllTours");
+			
+			Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+			Response resp = invocationBuilder.get();
+			System.out.println("Status :" + resp.getStatus());
+			
+			if(resp.getStatus() == Response.Status.OK.getStatusCode()) {
+				System.out.println("Successful Retrieval");
+				tourlist = resp.readEntity(new GenericType<ArrayList<Tour>>() {});
 			}
 		%>
+		
 		<div class="container">
 			<h1 style="font-family: sans-serif; margin-top: 20px; color: black">Manage Tours</h1>
 			<div class="row my-3">
