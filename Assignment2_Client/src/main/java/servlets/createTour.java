@@ -2,17 +2,28 @@ package servlets;
 
 import java.io.IOException;
 import java.sql.*;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.jose4j.json.internal.json_simple.JSONObject;
 
 /**
  * Servlet implementation class createTour
  */
-@WebServlet("/servlets/createTour")
+@WebServlet("/CreateTour")
 public class createTour extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -36,9 +47,10 @@ public class createTour extends HttpServlet {
 		String role = (String)session.getAttribute("sessRole");
 		System.out.println(userId + role);
 		if (role == null || !role.equals("Admin")){
-			response.sendRedirect("/Assignment1/pages/error/401.html");
+			response.sendRedirect("/Assignment2_Client/pages/error/401.html");
 			return;
 		}
+		
 		String tour = request.getParameter("tour");
 		String b_desc = request.getParameter("brief_desc");
 		String d_desc = request.getParameter("detailed_desc");
@@ -52,47 +64,37 @@ public class createTour extends HttpServlet {
 		try {
 			   price = Double.parseDouble(priceStr);
 			   slots = Integer.parseInt(slotsStr);
-			   category = Integer.parseInt(categoryStr);
-			   // Step1: Load JDBC Driver
-			   Class.forName("com.mysql.cj.jdbc.Driver");
-			
-			   // Step 2: Define Connection URL
-			   String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
-			
-			   // Step 3: Establish connection to URL
-			   Connection conn = DriverManager.getConnection(connURL); 
-			        
-			   // Step 4: Create a query string
-			   String sqlStr = "INSERT INTO tour (tour, brief_desc, detailed_desc, price, slots, fk_category_id, tour_pic_url) "
-			   		+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
-			        
-			   // Step 5: Execute SQL Command
-			   PreparedStatement ps = conn.prepareStatement(sqlStr);
-			   ps.setString(1, tour);
-			   ps.setString(2, b_desc);
-			   ps.setString(3, d_desc);
-			   ps.setDouble(4, price);
-			   ps.setInt(5, slots);
-			   ps.setInt(6, category);
-			   ps.setString(7, picture);
-			   
-			   int numRowsAffected = ps.executeUpdate();
-			   
-			   // Step 6: Process Result		        
-			   System.out.print("Num rows affected: " + numRowsAffected);
-			   
-			   // Step 7: Close connection
-			   conn.close();
-			   if (numRowsAffected == 1) {
-				   response.sendRedirect("/Assignment1/pages/managetours.jsp");
-			   } else {
-				   response.sendRedirect("/Assignment1/pages/tourform.jsp?errCode=failed");
-			   }   
-			} catch (NumberFormatException e){
-				response.sendRedirect("/Assignment1/pages/tourform.jsp?errCode=invalidField");
-			} catch (Exception e) {
-					System.out.print("Exception: " + e);
-			}
+			   category = Integer.parseInt(categoryStr);   
+		} catch (NumberFormatException e){
+				response.sendRedirect("/Assignment2_Client/pages/tourform.jsp?errCode=invalidField");
+				return;
+		}
+		JSONObject tourJSON = new JSONObject();
+		tourJSON.put("tour", tour);
+		tourJSON.put("brief_desc", b_desc);
+		tourJSON.put("detailed_desc", d_desc);
+		tourJSON.put("price", priceStr);
+		tourJSON.put("slots", slots);
+		tourJSON.put("fk_category_id", category);
+		tourJSON.put("tour_pic_url", picture);
+		
+		Client client = ClientBuilder.newClient();
+		String restUrl = "http://localhost:8080/Assignment2_Server/TourService";
+		WebTarget target = client
+				.target(restUrl)
+				.path("createTour");
+		
+		Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+		Response resp = invocationBuilder.put(Entity.entity(tourJSON, MediaType.APPLICATION_JSON));
+		System.out.println("Status :" + resp.getStatus());
+		
+		if(resp.getStatus() == Response.Status.CREATED.getStatusCode()) {
+			System.out.println("Success");
+			response.sendRedirect("/Assignment2_Client/pages/managetours.jsp");
+		} else {
+			System.out.println("Failure");
+			response.sendRedirect("/Assignment2_Client/pages/tourform.jsp?errCode=failed");;
+		}
 	}
 
 	/**

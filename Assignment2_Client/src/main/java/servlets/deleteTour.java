@@ -8,6 +8,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 
 /**
@@ -38,24 +45,29 @@ public class deleteTour extends HttpServlet {
 		String role = (String)session.getAttribute("sessRole");
 		System.out.println(userId + role);
 		if (role == null || !role.equals("Admin")){
-			response.sendRedirect("/Assignment1/pages/error/401.html");
+			response.sendRedirect("/Assignment2_Client/pages/error/401.html");
 			return;
 		}
 		
 		int tourid = Integer.parseInt(request.getParameter("tourid"));
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			String connURL = "jdbc:mysql:// localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
-			Connection conn = DriverManager.getConnection(connURL);
-			String sqlStr = "DELETE FROM tour WHERE tourid = ?";
-			PreparedStatement ps = conn.prepareStatement(sqlStr);
-			ps.setInt(1, tourid);
-			int numRowsAffected = ps.executeUpdate();
-			System.out.println(numRowsAffected);
-			conn.close();
-			response.sendRedirect("/Assignment1/pages/managetours.jsp");
-		} catch(Exception e) {
-			System.out.println("Exception: " + e);
+		
+		Client client = ClientBuilder.newClient();
+		String restUrl = "http://localhost:8080/Assignment2_Server/TourService";
+		WebTarget target = client
+				.target(restUrl)
+				.path("deleteTour")
+				.queryParam("tourid", tourid);
+		
+		Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+		Response resp = invocationBuilder.delete();
+		System.out.println("Status :" + resp.getStatus());
+		
+		if(resp.getStatus() == Response.Status.OK.getStatusCode()) {
+			System.out.println("Success");
+			response.sendRedirect("/Assignment2_Client/pages/managetours.jsp");
+		} else {
+			System.out.println("Failure");
+			response.sendRedirect("/Assignment2_Client/pages/mangetour.jsp");;
 		}
 	}
 
@@ -66,5 +78,5 @@ public class deleteTour extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-
+	
 }
