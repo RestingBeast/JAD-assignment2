@@ -1,6 +1,6 @@
 package dbaccess;
 
-public class UserInfo {
+public class PaymentInfo {
 	private int id;
 	private int userid;
 	private String fullname;
@@ -8,11 +8,11 @@ public class UserInfo {
 	private String zip;
 	private String address;
 	
-	public UserInfo() {
+	public PaymentInfo() {
 		
 	}
 	
-	public UserInfo(int id, int userid, String fullname, String phone, String zip, String address) {
+	public PaymentInfo(int id, int userid, String fullname, String phone, String zip, String address) {
 		super();
 		this.id = id;
 		this.userid = userid;
