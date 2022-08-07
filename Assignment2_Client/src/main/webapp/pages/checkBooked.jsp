@@ -36,8 +36,8 @@
 					Class.forName("com.mysql.cj.jdbc.Driver");
 					String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";		
 					conn = DriverManager.getConnection(connURL);		
-					String sqlStr = "SELECT t.tour, p.fullname, b.slots_taken "
-							+ "FROM booking AS b, paymentinfo AS p, tour AS t "
+					String sqlStr = "SELECT t.tour, p.full_name, b.slots_taken "
+							+ "FROM booking AS b, payment AS p, tour AS t "
 							+ "WHERE b.fk_user_id = p.fk_user_id AND t.tourid = b.fk_tour_id AND t.tour LIKE ?;";
 					PreparedStatement ps = conn.prepareStatement(sqlStr);
 					ps.setString(1, "%" + tour  + "%" );
@@ -47,7 +47,7 @@
 						<div style="border: 1px solid red; padding: 5px; margin-bottom: 10px;">
 							<p>
 								Tour: <%=rs.getString("tour") %> <br>
-								Fullname: <%=rs.getString("fullname") %><br>
+								Fullname: <%=rs.getString("full_name") %><br>
 								slots: <%=rs.getInt("slots_taken") %>
 							</p>
 						</div>

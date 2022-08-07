@@ -16,23 +16,6 @@ import dbaccess.PaymentInfoDAO;
 
 @Path("/PaymentInfoService")
 public class PaymentInfoService {
-	@GET
-	@Path("/getPaymentInfo")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getUserInfo(@QueryParam("userid") String useridStr) {
-		int userid = Integer.parseInt(useridStr);
-		PaymentInfo u = new PaymentInfo();
-		try {
-			PaymentInfoDAO db = new PaymentInfoDAO();
-			u = db.findById(userid);
-		} catch(Exception e) {
-			System.out.println("Exception : " + e);
-		}
-		return Response
-				.status(Response.Status.OK)
-				.entity(u)
-				.build();
-	}
 	
 	@GET
 	@Path("/searchByAddress")

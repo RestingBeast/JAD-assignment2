@@ -29,16 +29,16 @@
 				Class.forName("com.mysql.cj.jdbc.Driver");
 				String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";		
 				conn = DriverManager.getConnection(connURL);		
-				String sqlStr = "SELECT p.fullname, SUM(b.price) AS total_spent "
-						+ "FROM booking AS b, paymentinfo AS p "
-						+ "WHERE b.fk_user_id = p.fk_user_id GROUP BY p.fullname LIMIT 10;";
+				String sqlStr = "SELECT full_name, SUM(payment) AS total_spent "
+						+ "FROM payment "
+						+ "GROUP BY full_name LIMIT 10;";
 				PreparedStatement ps = conn.prepareStatement(sqlStr);
 				ResultSet rs = ps.executeQuery();
 				
 				while (rs.next()) { %>
 					<div style="border: 1px solid red; padding: 5px; margin-bottom: 10px;">
 						<p>
-							Fullname: <%=rs.getString("fullname") %><br>
+							Fullname: <%=rs.getString("full_name") %><br>
 							Total Spent: <%=rs.getInt("total_spent") %>
 						</p>
 					</div>

@@ -62,7 +62,7 @@ public class PaymentInfoDAO {
 			
 			conn = DriverManager.getConnection(connURL);
 			
-			String sqlStr = "SELECT * FROM userdetails WHERE fk_user_id = ?";
+			String sqlStr = "SELECT * FROM payment WHERE fk_user_id = ?";
 			
 			PreparedStatement ps = conn.prepareStatement(sqlStr);
 			ps.setInt(1, userid);
@@ -74,10 +74,11 @@ public class PaymentInfoDAO {
 		
 				u.setId(rs.getInt("id"));
 				u.setUserid(rs.getInt("fk_user_id"));
-				u.setFullname(rs.getString("fullname"));
-				u.setPhone(rs.getString("phone"));
+				u.setFullname(rs.getString("full_name"));
+				u.setPhone(rs.getString("phone_number"));
 				u.setZip(rs.getString("zip"));
-				u.setAddress(rs.getString("residential_addressm"));
+				u.setAddress(rs.getString("address"));
+				u.setPayment(rs.getDouble("payment"));
 			}
 		} catch (Exception e) {
 			System.out.print("Exception: " + e);
@@ -106,7 +107,7 @@ public class PaymentInfoDAO {
 			
 			conn = DriverManager.getConnection(connURL);
 			
-			String sqlStr = "SELECT * FROM paymentinfo WHERE residential_address LIKE ?";
+			String sqlStr = "SELECT * FROM payment WHERE address LIKE ?";
 			
 			PreparedStatement ps = conn.prepareStatement(sqlStr);
 			ps.setString(1, address + "%");
@@ -116,12 +117,13 @@ public class PaymentInfoDAO {
 			while (rs.next()) {
 				p = new PaymentInfo();
 		
-				p.setId(rs.getInt("id"));
+				p.setId(rs.getInt("payment_id"));
 				p.setUserid(rs.getInt("fk_user_id"));
-				p.setFullname(rs.getString("fullname"));
-				p.setPhone(rs.getString("phone"));
+				p.setFullname(rs.getString("full_name"));
+				p.setPhone(rs.getString("phone_number"));
 				p.setZip(rs.getString("zip"));
-				p.setAddress(rs.getString("residential_address"));
+				p.setAddress(rs.getString("address"));
+				p.setPayment(rs.getDouble("payment"));
 				
 				pInfos.add(p);
 			}
