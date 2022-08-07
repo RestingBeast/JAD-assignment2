@@ -2,6 +2,8 @@ package servlets;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class FileUploadServlet
@@ -35,10 +38,27 @@ public class FileUploadServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		try {
+			String action = request.getParameter("action");
+			
+			if (action == null) {
+				tourPicture(request, response);
+			} else {
+				if (action.equalsIgnoreCase("user")) {
+					userPicture(request, response);
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("Exception: " + e.getMessage());
+		}
+		
+	}
+	
+	protected void tourPicture(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
 		String url = "http://localhost:8080/Assignment2_Client/pages/tourform.jsp";
 		String touridPart = request.getParameter("tourid");
-		System.out.println(touridPart);
+		System.out.println(touridPart + "Start");
 		int tourid = 0;
 		if (!touridPart.equals("-1")) {
 			tourid = Integer.parseInt(touridPart);
@@ -51,25 +71,56 @@ public class FileUploadServlet extends HttpServlet {
 			    for (Part part : request.getParts()) {
 			      part.write(filePath);
 			    }
+			    url+= "?pic_url="+fileName;
+			    System.out.println("Here 1" + url);
 			    if (tourid != 0) {
 			    	url += "&tourid=" + tourid;
+			    	System.out.println("Here 2" + url);
 			    }
-			} catch (FileNotFoundException e) {
+			} catch (Exception e) {
 				if (tourid != 0) {
 			    	url += "?tourid=" + tourid;
 			    }
+				System.out.println("Here 3" + url);
 			} finally {
-				
+				System.out.println("Here 4" + url);
 				response.sendRedirect(url);
 			}
 		    
 		} else {
 			if (tourid != 0) {
 		    	url += "?tourid=" + tourid;
+		    	System.out.println("Here 5" + url);
 		    }
 			response.sendRedirect(url);
+			System.out.println("Here 6" + url);
 		}
-		
+	}
+	
+	protected void userPicture(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		String pictureParam = "";
+		Part filePart = request.getPart("picture");
+		if (filePart != null) {
+			try {
+				String fileName = filePart.getSubmittedFileName();
+			    String filePath = "D:\\KKZ\\School\\Y2Sem1\\J2EE\\CA2\\JAD-assignment2\\Assignment2_Client\\src\\main\\webapp\\images\\user\\"+ fileName;
+			    for (Part part : request.getParts()) {
+			      part.write(filePath);
+			    }
+			    System.out.println(fileName);
+			    pictureParam="?picture="+fileName;
+			} catch (Exception e) {
+				System.out.println("Here 1");
+			} finally {		
+				response.sendRedirect("/Assignment2_Client/pages/register.jsp" + pictureParam);
+				System.out.println("Here 2");
+			}
+		    
+		} else {
+			response.sendRedirect("/Assignment2_Client/pages/register.jsp");
+			System.out.println("Here 3");
+		}
 	}
 
 	/**

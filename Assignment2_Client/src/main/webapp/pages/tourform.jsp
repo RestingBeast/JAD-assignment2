@@ -19,7 +19,7 @@
 <body>
 	<div class="page-wrapper">
 		<%@ page import="java.sql.*" %>
-		<%@ include file="./components/header.jsp" %>
+		<%@ include file="./components/adminHeader.jsp" %>
 		<%
 			String userId = (String)session.getAttribute("sessUserID");
 			String role = (String)session.getAttribute("sessRole");

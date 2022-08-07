@@ -3,9 +3,9 @@ package dbaccess;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class UserInfoDAO {
-	public UserInfo findById(int userid) {
-		UserInfo u = null;
+public class PaymentInfoDAO {
+	public PaymentInfo findById(int userid) {
+		PaymentInfo u = null;
 		Connection conn = null;
 		
 		try {
@@ -23,7 +23,7 @@ public class UserInfoDAO {
 			ResultSet rs = ps.executeQuery();
 			
 			if (rs.next()) {
-				u = new UserInfo();
+				u = new PaymentInfo();
 		
 				u.setId(rs.getInt("id"));
 				u.setUserid(rs.getInt("fk_user_id"));
@@ -82,9 +82,9 @@ public class UserInfoDAO {
 		return rowsAffected;
 	}
 	
-	public ArrayList<UserInfo> getAll(){
-		ArrayList<UserInfo> users = new ArrayList<UserInfo>();
-		UserInfo u = null;
+	public ArrayList<PaymentInfo> getAll(){
+		ArrayList<PaymentInfo> users = new ArrayList<PaymentInfo>();
+		PaymentInfo u = null;
 		Connection conn = null;
 		
 		try {
@@ -96,7 +96,7 @@ public class UserInfoDAO {
 			ResultSet rs = ps.executeQuery();
 			
 			while (rs.next()) {
-				u = new UserInfo();			
+				u = new PaymentInfo();			
 				u.setId(rs.getInt("id"));
 				u.setUserid(rs.getInt("fk_user_id"));
 				u.setFullname(rs.getString("fullname"));

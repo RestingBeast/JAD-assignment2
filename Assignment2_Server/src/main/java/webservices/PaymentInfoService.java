@@ -11,19 +11,19 @@ import javax.ws.rs.core.Response;
 
 import dbaccess.Tour;
 import dbaccess.TourDAO;
-import dbaccess.UserInfo;
-import dbaccess.UserInfoDAO;
+import dbaccess.PaymentInfo;
+import dbaccess.PaymentInfoDAO;
 
 @Path("/UserInfoService")
-public class UserInfoService {
+public class PaymentInfoService {
 	@GET
 	@Path("/getUserInfo")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getUserInfo(@QueryParam("userid") String useridStr) {
 		int userid = Integer.parseInt(useridStr);
-		UserInfo u = new UserInfo();
+		PaymentInfo u = new PaymentInfo();
 		try {
-			UserInfoDAO db = new UserInfoDAO();
+			PaymentInfoDAO db = new PaymentInfoDAO();
 			u = db.findById(userid);
 		} catch(Exception e) {
 			System.out.println("Exception : " + e);
@@ -38,9 +38,9 @@ public class UserInfoService {
 	@Path("/getAll")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllTours() {
-		ArrayList<UserInfo> users = new ArrayList<UserInfo>();
+		ArrayList<PaymentInfo> users = new ArrayList<PaymentInfo>();
 		try {
-			UserInfoDAO db = new UserInfoDAO();
+			PaymentInfoDAO db = new PaymentInfoDAO();
 			users = db.getAll();
 		} catch (Exception e) {
 			System.out.println("Exception : " + e);
