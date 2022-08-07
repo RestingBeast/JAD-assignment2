@@ -46,6 +46,8 @@
 						<a href="#">Sale Management</a>	
 						<ul>
 							<li><a href="./bookingreport.jsp">Booking Report For this month</a></li>
+							<li><a href="./top10customer.jsp">Top 10 Customer</a></li>
+							<li><a href="./checkBooked.jsp">Check Booked Customer</a></li>
 						</ul>
 					</li>
 					

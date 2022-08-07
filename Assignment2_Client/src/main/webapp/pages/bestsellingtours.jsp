@@ -11,6 +11,15 @@
 </head>
 <body>
 	<%
+		String userId = (String)session.getAttribute("sessUserID");
+		String role = (String)session.getAttribute("sessRole");
+		System.out.println(userId + role);
+		if (role == null || !role.equals("Admin")){
+			response.sendRedirect("./error/401.html");
+			return;
+		}
+	%>
+	<%
 	ArrayList<BookedTours> tours = new ArrayList<BookedTours>();
 			BookedTours t = null;
 			Connection conn = null;
@@ -53,15 +62,6 @@
 
 	<div class="page-wrapper">
 		<%@ include file="./components/adminHeader.jsp" %>
-		<%
-			String userId = (String)session.getAttribute("sessUserID");
-			String role = (String)session.getAttribute("sessRole");
-			System.out.println(userId + role);
-			if (role == null || !role.equals("Admin")){
-				response.sendRedirect("./error/401.html");
-				return;
-			}
-		%>
 		<section class="page-header"
 			style="background-image: url(../images/backgrounds/category-0.jpg);">
 			<div class="container">

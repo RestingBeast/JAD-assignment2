@@ -5,46 +5,41 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Booking Report</title>
+	<title>Top 10 Customer</title>
 	<link href="../css/bootstrap.min.css" rel="stylesheet"/>
 	<link href="../css/style.css" rel="stylesheet" />
 </head>
-	<body>
-		<%
-			String userId = (String)session.getAttribute("sessUserID");
-			String role = (String)session.getAttribute("sessRole");
-			System.out.println(userId + role);
-			if (role == null || !role.equals("Admin")){
-				response.sendRedirect("./error/401.html");
-				return;
-			}
-		%>
-		<div class="page-wrapper">
+<body>
+	<%
+		String userId = (String)session.getAttribute("sessUserID");
+		String role = (String)session.getAttribute("sessRole");
+		System.out.println(userId + role);
+		if (role == null || !role.equals("Admin")){
+			response.sendRedirect("./error/401.html");
+			return;
+		}
+	%>
+	<div class="page-wrapper">
 		<%@ include file="./components/adminHeader.jsp" %>
 		<div class="container">
-		<h1>Booking this Month</h1>
+		<h1>Top 10 Customer</h1>
 		<%
 			Connection conn = null;
 			try {
 				Class.forName("com.mysql.cj.jdbc.Driver");
 				String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";		
 				conn = DriverManager.getConnection(connURL);		
-				String sqlStr = "SELECT b.booking_id, p.fullname, b.slots_taken, t.tour, b.price, b.created_at "
-					+ "FROM booking AS b, paymentinfo AS p, tour AS t WHERE "
-					+ "'2022-08-01 00:00:00' < b.created_at < '2022-08-31 00:00:00' AND b.fk_user_id = p.fk_user_id AND "
-					+ "b.fk_tour_id = t.tourid;";
+				String sqlStr = "SELECT p.fullname, SUM(b.price) AS total_spent "
+						+ "FROM booking AS b, paymentinfo AS p "
+						+ "WHERE b.fk_user_id = p.fk_user_id GROUP BY p.fullname LIMIT 10;";
 				PreparedStatement ps = conn.prepareStatement(sqlStr);
 				ResultSet rs = ps.executeQuery();
 				
 				while (rs.next()) { %>
 					<div style="border: 1px solid red; padding: 5px; margin-bottom: 10px;">
 						<p>
-							BookingId: <%=rs.getInt("booking_id") %> <br>
 							Fullname: <%=rs.getString("fullname") %><br>
-							slots: <%=rs.getInt("slots_taken") %> <br>
-							Tour: <%=rs.getString("tour") %> <br>
-							Paid: S$<%=rs.getDouble("price") %> <br>
-							Created At: <%=rs.getTimestamp("created_at") %>
+							Total Spent: <%=rs.getInt("total_spent") %>
 						</p>
 					</div>
 		<%		}
@@ -63,6 +58,6 @@
 		%>
 		</div>
 		<%@ include file="./components/footer.jsp" %>
-		</div>
-	</body>
+	</div>
+</body>
 </html>

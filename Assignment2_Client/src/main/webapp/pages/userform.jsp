@@ -20,21 +20,21 @@
 	</style>
 </head>
 <body>
+	<%
+		String userId = (String)session.getAttribute("sessUserID");
+		String role = (String)session.getAttribute("sessRole");
+		System.out.println(userId + role);
+		if (role == null || !role.equals("Admin")){
+			response.sendRedirect("./error/401.html");
+			return;
+		}
+	%>
 	<div class="page-wrapper">
 		<%@ include file="./components/adminHeader.jsp" %>
 		<%
 			String picture = "", username="", email="", password="", roleF="";
 			int userid = -1; 
 			User u = null;
-		%>
-		<%
-			String userId = (String)session.getAttribute("sessUserID");
-			String role = (String)session.getAttribute("sessRole");
-			System.out.println(userId + role);
-			if (role == null || !role.equals("Admin")){
-				response.sendRedirect("./error/401.html");
-				return;
-			}
 		%>
 		<%
 			if (request.getParameter("userid") != null) {

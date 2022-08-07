@@ -8,6 +8,15 @@
 <title>Sort By Address</title>
 </head>
 <body>
+	<%
+		String userId = (String)session.getAttribute("sessUserID");
+		String role = (String)session.getAttribute("sessRole");
+		System.out.println(userId + role);
+		if (role == null || !role.equals("Admin")){
+			response.sendRedirect("./error/401.html");
+			return;
+		}
+	%>
 	<%@ include file="./components/adminHeader.jsp" %>
 	<div class="page-wrapper">
 		<div class="container">
