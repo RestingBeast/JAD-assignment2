@@ -142,7 +142,7 @@ public class PaymentInfoDAO {
 		return pInfos;
 	}
 	
-	public int insertPayment(int uid, String name, String phone, String address, String zip, double price) {
+	public int createPayment(int uid, String name, String phone, String address, String zip, double price) {
 		Connection conn = null;
 		int rowsAffected = -1;
 		
@@ -151,9 +151,10 @@ public class PaymentInfoDAO {
 			String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
 			conn = DriverManager.getConnection(connURL);
 			
-			String sqlStr = "INSERT INTO payment (fk_user_id, full_name, phone_number, address, zip, payment) VALUES (?, ?, ?, ?, ?, ?)";
-			PreparedStatement ps = conn.prepareStatement(sqlStr);
+			String sqlStr = "INSERT INTO payment (fk_user_id, full_name, phone_number, address, zip, payment)"
+					+ "VALUES (?, ?, ?, ?, ?, ?)";
 			
+			PreparedStatement ps = conn.prepareStatement(sqlStr);
 			ps.setInt(1, uid);
 			ps.setString(2, name);
 			ps.setString(3, phone);
@@ -162,6 +163,7 @@ public class PaymentInfoDAO {
 			ps.setDouble(6, price);
 			
 			rowsAffected = ps.executeUpdate();
+			System.out.println(rowsAffected);
 		}  catch (Exception e) {
 			System.out.print("Exception: " + e);
 		} finally {

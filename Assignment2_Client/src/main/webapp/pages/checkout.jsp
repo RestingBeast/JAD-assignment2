@@ -8,6 +8,7 @@
 <head>
 	<meta charset="ISO-8859-1">
 	<title>Checkout</title>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
 	<link href="../css/fontawesome-all.min.css" rel="stylesheet">
 	<link href="../css/bootstrap.min.css" rel="stylesheet" />
 	<link href="../css/animate.min.css" rel="stylesheet" />
@@ -110,7 +111,7 @@
 		    
 		    <div class="col-md-8 order-md-1">
 		      <h4 class="mb-3">Billing address</h4>
-		      <form action="/Assignment2_Client/checkout" method="post" class="needs-validation" novalidate>
+		      <form action="../CheckoutServlet" method="post" class="needs-validation">
 		        <div class="row">
 		          <div class="col-md-6 mb-3">
 		            <label for="firstName">First name</label>
@@ -140,14 +141,14 @@
 		        </div>
 		
 		        <div class="mb-3">
-		          <label for="email">Email <span class="text-muted">(Optional)</span></label>
+		          <label for="email">Email <span class="text-muted"></span></label>
 		          <input type="email" class="form-control" id="email" 
 		          	value="<%=user.getEmail()%>" placeholder="you@example.com" disabled>
 		        </div>
 		
 		        <div class="mb-3">
 		          <label for="address2">Phone Number <span class="text-muted"></span></label>
-		          <input type="text" class="form-control" name="phoneNumber" placeholder="Personal Phone Number">
+		          <input type="text" class="form-control" name="phoneNumber" placeholder="Personal Phone Number" required>
 		        </div>
 		        
 		        <div class="mb-3">
