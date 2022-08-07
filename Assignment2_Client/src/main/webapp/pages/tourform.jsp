@@ -5,8 +5,16 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Tour Form</title>
-	<link href="../css/bootstrap.min.css" rel="stylesheet" />
-	<link href="../css/style.css" rel="stylesheet" />
+	<link href="<%= request.getContextPath()%>/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="<%= request.getContextPath()%>/css/style.css" rel="stylesheet" />
+	<style>
+		.image-center{
+			margin: auto;
+		}
+		.no-display{
+			display: none;
+		}
+	</style>
 </head>
 <body>
 	<div class="page-wrapper">
@@ -22,7 +30,7 @@
 			}
 		%>
 		<%
-			String tour = "", b_desc = "", d_desc = "", picture = "";
+			String tour = "", b_desc = "", d_desc = "", picture = "../images/tour/";
 			double price = 0; int slots = 0, category = -1, tourid = -1;
 		%>
 		<%
@@ -30,7 +38,7 @@
 				tourid = Integer.parseInt(request.getParameter("tourid"));
 				try {
 					Class.forName("com.mysql.jdbc.Driver");
-					String connURL = "jdbc:mysql:// localhost:3306/assignment1?user=root&password=owlciitty&serverTimezone=UTC";
+					String connURL = "jdbc:mysql:// localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
 					Connection conn = DriverManager.getConnection(connURL);
 					String sqlStr = "SELECT * FROM tour WHERE tourid = ?";
 					PreparedStatement ps = conn.prepareStatement(sqlStr);
@@ -40,7 +48,7 @@
 						tour = rs.getString("tour");
 						b_desc = rs.getString("brief_desc");
 						d_desc = rs.getString("detailed_desc");
-						picture = rs.getString("tour_pic_url");
+						picture += rs.getString("tour_pic_url");
 						price = rs.getDouble("price");
 						slots = rs.getInt("slots");
 						category = rs.getInt("fk_category_id");
@@ -49,9 +57,33 @@
 					System.out.println("Exception: " + e);
 				}
 			}
+			
+			if (request.getParameter("pic_url") != null) {
+				picture = "D:\\KKZ\\School\\Y2Sem1\\J2EE\\CA2\\" + request.getParameter("pic_url");
+				System.out.println(picture);
+			}
 		%>
 		<div class="form">
-			<form  method="post" action="/Assignment1/servlets/createTour">
+			<h2 class="h2" style="text-align: center;">Tour Form</h2>
+			<div class="form-group row" >
+				<div class="image-center"><img src="<%= picture %>" alt="" ></div>		
+			</div>
+			<form method="post"action="/Assignment2_Client/FileUploadServlet" enctype="multipart/form-data" >
+				<div class="form-group row">
+					<div class="col-md-2">
+						<input class="no-display" type="text" id="tourid" name="tourid" value="<%= tourid %>" readonly >
+					</div>
+					<input
+				        type="file"
+				        class="form-control col-md-6"
+				        id="picture"
+				        name="picture"
+			         />
+			         <input class="col-md-2 btn btn-primary" type="submit"  value="Upload" />
+			         <div class="col-md-2"></div>
+				</div>	
+			</form>
+			<form  method="post" action="/Assignment2_Client/CreateTour">
 				<div class="form-group row">
 				  <label for="tourname" class="col-md-2 col-form-label">Tour Name:</label>
 				  <div class="col-md-10">
@@ -116,7 +148,7 @@
 								<%
 									try {
 										Class.forName("com.mysql.jdbc.Driver");
-										String connURL = "jdbc:mysql:// localhost:3306/assignment1?user=root&password=owlciitty&serverTimezone=UTC";
+										String connURL = "jdbc:mysql:// localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
 										Connection conn = DriverManager.getConnection(connURL);
 										Statement stmt = conn.createStatement();
 										String sqlStr = "SELECT * FROM category";
@@ -151,14 +183,6 @@
 		        </fieldset>
 		        <div class="form-group row">
 				  <label for="picture" class="col-md-2 col-form-label">Tour Picture URL:</label>
-				  <div class="col-md-10">
-				  	<input
-			            type="text"
-			            class="form-control"
-			            id="picture"
-			            name="picture"
-		          	/>
-				  </div>
 		        </div>
 		        <%
 		        	if (request.getParameter("errCode") != null) {
@@ -180,7 +204,7 @@
 		        	</div>
 				    <div class="col-md-10">
 				      <% if (tourid != -1){ %>
-				      		<button type="submit" formaction="/Assignment1/servlets/updateTour?tourid=<%=tourid%>" class="btn btn-primary mr-4">Update</button>
+				      		<button type="submit" formaction="/Assignment2_Client/servlets/updateTour?tourid=<%=tourid%>" class="btn btn-primary mr-4">Update</button>
 				      <% } else { %>
 				      		<button type="submit" class="btn btn-primary mr-4">Create</button>
 				      <%}
