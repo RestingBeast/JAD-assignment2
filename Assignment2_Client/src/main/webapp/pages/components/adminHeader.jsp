@@ -42,6 +42,12 @@
 							<li><a href="./sortbyaddress.jsp">Residential Address</a></li>
 						</ul>
 					</li>
+					<li>
+						<a href="#">Sale Management</a>	
+						<ul>
+							<li><a href="./bookingreport.jsp">Booking Report For this month</a></li>
+						</ul>
+					</li>
 					
 					<% if (id_h != null) { %>
 						<li>
