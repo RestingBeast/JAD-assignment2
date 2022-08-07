@@ -21,14 +21,15 @@
 		<div id="login-form-wrap">
 		<h2>Register for <img src="../images/loader.png" width = "30" class="main-logo" alt="Awesome Image" />tripo</h2>
 			<form id="upload-form" method="post" action="/Assignment2_Client/FileUploadServlet?action=user" enctype="multipart/form-data" >
-				<p class="col-md-6">
+				<p style="border: 1px solid red;">
 						<input
 					        type="file"
 					        id="picture"
 					        name="picture"
+					        style="height: auto;"
 				         />
 					</p>	
-					<p class="col-md-2">
+					<p>
 					<input type="submit"  value="Upload" />
 					</p>		
 			</form>

@@ -14,10 +14,10 @@ import dbaccess.TourDAO;
 import dbaccess.PaymentInfo;
 import dbaccess.PaymentInfoDAO;
 
-@Path("/UserInfoService")
+@Path("/PaymentInfoService")
 public class PaymentInfoService {
 	@GET
-	@Path("/getUserInfo")
+	@Path("/getPaymentInfo")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getUserInfo(@QueryParam("userid") String useridStr) {
 		int userid = Integer.parseInt(useridStr);
@@ -35,19 +35,19 @@ public class PaymentInfoService {
 	}
 	
 	@GET
-	@Path("/getAll")
+	@Path("/searchByAddress")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAllTours() {
-		ArrayList<PaymentInfo> users = new ArrayList<PaymentInfo>();
+	public Response serachPaymentInfo(@QueryParam("address") String address) {
+		ArrayList<PaymentInfo> pInfos = new ArrayList<PaymentInfo>();
 		try {
 			PaymentInfoDAO db = new PaymentInfoDAO();
-			users = db.getAll();
+			pInfos = db.findByAddress(address);
 		} catch (Exception e) {
 			System.out.println("Exception : " + e);
 		}
 		return Response
 				.status(Response.Status.OK)
-				.entity(users)
+				.entity(pInfos)
 				.build();
 	}
 }

@@ -6,23 +6,12 @@ public class BookedTours {
 	private String brief_desc;
 	private double totalSale;
 	private int slotsAvailable;
+	private int maxSlots;
 	private int categoryid;
 	private String pic_url;
 	
 	public BookedTours() {
 		
-	}
-	
-	public BookedTours(int tourid, String tour, String brief_desc, double totalSale, int slotsAvailable,
-			int categoryid, String pic_url) {
-		super();
-		this.tourid = tourid;
-		this.tour = tour;
-		this.brief_desc = brief_desc;
-		this.totalSale = totalSale;
-		this.slotsAvailable = slotsAvailable;
-		this.categoryid = categoryid;
-		this.pic_url = pic_url;
 	}
 
 	public int getTourid() {
@@ -64,6 +53,14 @@ public class BookedTours {
 
 	public void setSlotsAvailable(int slotsAvailable) {
 		this.slotsAvailable = slotsAvailable;
+	}
+
+	public int getMaxSlots() {
+		return maxSlots;
+	}
+
+	public void setMaxSlots(int maxSlots) {
+		this.maxSlots = maxSlots;
 	}
 
 	public int getCategoryid() {

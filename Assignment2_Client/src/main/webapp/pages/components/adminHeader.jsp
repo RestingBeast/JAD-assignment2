@@ -33,11 +33,14 @@
 						<a href="./managetours.jsp">Tours</a>
 						<ul>
 								<li><a href="./bestsellingtours.jsp">Best Selling</a></li>
-								<li><a href="#">Slots Availability</a></li>
+								<li><a href="./lowslotsavailability.jsp">Slots Availability</a></li>
 						</ul>
 					</li>
 					<li>
-						<a href="./managecustomers.jsp">Customer</a>
+						<a href="./managecustomers.jsp">Customer</a>	
+						<ul>
+							<li><a href="./sortbyaddress.jsp">Residential Address</a></li>
+						</ul>
 					</li>
 					
 					<% if (id_h != null) { %>

@@ -5,7 +5,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Best Selling Tours</title>
+	<title>Tours with Low Slots Availability</title>
 	<link href="../css/bootstrap.min.css" rel="stylesheet"/>
 	<link href="../css/style.css" rel="stylesheet" />
 </head>
@@ -20,7 +20,7 @@
 		conn = DriverManager.getConnection(connURL);
 		String sqlStr = "SELECT t.tourid, t.tour, t.brief_desc, ROUND(b.price , 2) AS total_sale,"
 			    + "t.slots - b.slots_taken AS slots_available, t.slots AS max_slots, t.fk_category_id, t.tour_pic_url "
-			    + "FROM tour AS t, booking AS b WHERE t.tourid = b.fk_tour_id ORDER BY b.price DESC";
+			    + "FROM tour AS t,	booking AS b WHERE t.tourid = b.fk_tour_id AND (b.slots_taken/t.slots) > (75/100);";
 		PreparedStatement ps = conn.prepareStatement(sqlStr);
 		ResultSet rs = ps.executeQuery();
 		
@@ -63,16 +63,16 @@
 			}
 		%>
 		<section class="page-header"
-			style="background-image: url(../images/backgrounds/category-0.jpg);">
+			style="background-image: url(../images/backgrounds/category-1.jpg);">
 			<div class="container">
-				<h2>Best Selling Tours</h2>
+				<h2>Slots Availability</h2>
 			</div>
 		</section>
 		
 		<section style="padding-bottom:0px" class="tour-one tour-grid">
 			<div class="container">
 				<div class="tour-sorter-one">
-					<h3>Best to Least Selling</h3>
+					<h3>Tours with less than 75% available slots</h3>
 				</div><!-- /.tour-sorter-one -->
 
 				<% int i=0; %>
@@ -93,8 +93,8 @@
 								<div class="tour-one__content">
 									<h3>No.<%=i+1%>: <%=tours.get(i).getTour()%></h3>
 									<ul class="tour-one__meta list-unstyled">
-										<li>Total Sale: S$<%= String.format("%.2f", tours.get(i).getTotalSale()) %><br /></li>
-										<li>Slots Left: <%=tours.get(i).getSlotsAvailable() %></li>
+										<li>Available Slots: <%= tours.get(i).getSlotsAvailable() %><br /></li>
+										<li>Max Slots <%=tours.get(i).getMaxSlots() %></li>
 									</ul><!-- /.tour-one__meta -->
 								</div><!-- /.tour-one__content -->
 							</div><!-- /.tour-one__single -->
