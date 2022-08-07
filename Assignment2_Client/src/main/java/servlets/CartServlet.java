@@ -81,7 +81,6 @@ public class CartServlet extends HttpServlet {
 					.queryParam("tourid", id);
 			Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
 			Response resp = invocationBuilder.get();
-			System.out.println(id);
 			System.out.println("Status: " + resp.getStatus());
 			
 			if (resp.getStatus() == Response.Status.OK.getStatusCode()) {
@@ -97,7 +96,7 @@ public class CartServlet extends HttpServlet {
 					cart.add(tour);
 					slotsArr.add(slots);
 					session.setAttribute("cart", cart);
-					session.setAttribute("slots", slotsArr);
+					session.setAttribute("slotsArr", slotsArr);
 				} else {
 					System.out.println("idk");
 				}
@@ -107,10 +106,13 @@ public class CartServlet extends HttpServlet {
 		} else {
 			@SuppressWarnings("unchecked")
 			List<Tour> cart = (List<Tour>) session.getAttribute("cart");
-			List<Integer> slotsArr = new ArrayList<Integer>();
+			
+			@SuppressWarnings("unchecked")
+			List<Integer> slotsArr = (List<Integer>) session.getAttribute("slotsArr");
+			String tid = request.getParameter("id");
 			
 			int slots = Integer.parseInt(request.getParameter("slots"));
-			int index = isExisting(request.getParameter("id"), cart);
+			int index = isExisting(tid, cart);
 			
 			if (index == -1) {
 				Client client = ClientBuilder.newClient();
@@ -118,7 +120,7 @@ public class CartServlet extends HttpServlet {
 				WebTarget target = client
 						.target(restUrl)
 						.path("findTourById")
-						.queryParam("tourid", index);
+						.queryParam("tourid", tid);
 				Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
 				Response resp = invocationBuilder.get();
 				
@@ -135,7 +137,7 @@ public class CartServlet extends HttpServlet {
 						cart.add(tour);
 						slotsArr.add(slots);
 					} else {
-						System.out.println("idk");
+						System.out.println("Tour not found");
 					}
 				} else {
 					System.out.println("failed2");
@@ -146,7 +148,7 @@ public class CartServlet extends HttpServlet {
 			}
 			
 			session.setAttribute("cart", cart);
-			session.setAttribute("slots", slotsArr);
+			session.setAttribute("slotsArr", slotsArr);
 		}
 		
 		response.sendRedirect(request.getContextPath() + "/pages/cart.jsp");
@@ -160,6 +162,11 @@ public class CartServlet extends HttpServlet {
 		
 		int index = isExisting(request.getParameter("id"), cart);
 		cart.remove(index);
+		
+		if (cart.size() == 0) {
+			cart = null;
+		}
+		
 		session.setAttribute("cart", cart);
 		response.sendRedirect(request.getContextPath() + "/pages/cart.jsp");
 	}

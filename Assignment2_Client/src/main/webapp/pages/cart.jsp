@@ -20,46 +20,88 @@
 	</style>
 </head>
 <body>
+	<% 	
+		// session.invalidate();
+		@SuppressWarnings("unchecked")
+		ArrayList<Tour> cart =  (ArrayList<Tour>) session.getAttribute("cart"); 
+		@SuppressWarnings("unchecked")	
+		ArrayList<Integer> slots = (ArrayList<Integer>) session.getAttribute("slotsArr");
+	%>
+	
 	<div class="wrapper">
 		<%@include file="./components/header.jsp" %>
 		
 		<section class="page-header"
 			style="background-image: url(../images/backgrounds/category-0.jpg);">
 			<div class="container">
-				<h2>Cart</h2>
+				<h2>Your Cart</h2>
 				<ul class="thm-breadcrumb list-unstyled">
 					<li><a href="index.jsp">Home</a></li>
 					<li><span>Cart</span></li>
 				</ul><!-- /.thm-breadcrumb -->
 			</div><!-- /.container -->
 		</section><!-- /.tour-details__header -->
-		
-		<% 	
-			@SuppressWarnings("unchecked")
-			ArrayList<Tour> cart =  (ArrayList<Tour>) session.getAttribute("cart"); 
-			@SuppressWarnings("unchecked")	
-			ArrayList<Integer> slots = (ArrayList<Integer>) session.getAttribute("slots");
-		%>
 	
-		<% if (cart != null) { %>
-			<table>
-				<tr>
-					<th>Items</th>
-					<th>Tour</th>
-					<th>Slots</th>
-					<th>Total Price</th>
-					<th>Option</th>
-				</tr>
-				<tr>
-					<% for(int i = 0; i < cart.size(); i++) { %>
-							<td><%= (i + 1) %></td>
-							<td><%= cart.get(i).getName() %></td>
-							<td><%= slots.get(i) %></td>
-							<td><%= (cart.get(i).getPrice() * slots.get(i)) %></td>
-							<td>Delete</td>
-					<%	} %>
-				</tr>
-			</table>	
+		<% if (cart != null && cart.size() != 0 && 
+			slots != null && slots.size() != 0 ) { %>
+		<section style="padding-bottom:0px" class="tour-one tour-grid">
+			<div class="container">
+				<div class="tour-sorter-one">
+						<h3>Tour Categories</h3>
+				</div><!-- /.tour-sorter-one -->
+				<div class="row my-3">
+					<div class="col-md-2">
+						<h3 class="text-dark" style="font-family: sans-serif;">Item</h3>
+					</div>
+					<div class="col-md-2">
+						<h3 class="text-dark" style="font-family: sans-serif;">Tour</h3>
+					</div>
+					<div class="col-md-2">
+						<h3 class="text-dark" style="font-family: sans-serif;">Category</h3>
+					</div>
+					<div class="col-md-2">
+						<h3 class="text-dark" style="font-family: sans-serif;">Slots</h3>
+					</div>
+					<div class="col-md-2">
+						<h3 class="text-dark" style="font-family: sans-serif;">Total Price</h3>
+					</div>
+					<div class="col-md-2 text-justify">
+						<button class="btn btn-success" onClick="window.location.href='checkout.jsp'">Checkout</button>
+					</div>
+				</div>
+				<% for(int i = 0; i < cart.size(); i++) { %>
+					<div class="row my-2">
+						<div class="col-md-2">
+							<%= (i + 1) %>
+						</div>
+						<div class="col-md-2">
+							<%= cart.get(i).getName() %>
+						</div>
+						<div class="col-md-2">
+							<%= CategoryUtils.getCategoryName(cart.get(i).getCategoryID()) %>
+						</div>
+						<div class="col-md-2">
+							<%= slots.get(i) %>
+						</div>
+						<div class="col-md-2">
+							<%= (cart.get(i).getPrice() * slots.get(i)) %>
+						</div>
+						<div class="col-md-2">
+							<form action="/Assignment2_Client/cart?&action=remove&id=<%= cart.get(i).getId() %>" method="post">
+								<button
+									type="submit"
+									class="btn btn-danger text-justify" 
+									onClick= "{	return confirm('Are you sure you want to delete this item?')}">
+									Delete
+								</button>
+							</form>
+						</div>
+					</div>
+				<%	} %>
+				<br>
+				<a href="./categories.jsp">Continue Shopping</a>
+			</div>
+		</section>
 		<% } else { %>
 			<section style="padding-bottom:0px" class="tour-one tour-grid">
 				<div class="container">
