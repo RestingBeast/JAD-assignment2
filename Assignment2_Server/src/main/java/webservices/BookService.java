@@ -15,7 +15,6 @@ import dbaccess.*;
 
 public class BookService {
 	TourDAO tourDB = new TourDAO();
-	BookingDAO bookDB = new BookingDAO();
 	
 	@GET
 	@Path("/getAll")
@@ -24,6 +23,7 @@ public class BookService {
 		ArrayList<Booking> bookArr = new ArrayList<>();
 		
 		try {
+			BookingDAO bookDB = new BookingDAO();
 			bookArr = bookDB.listAllBookings();
 		} catch (Exception e) {
 			System.out.println("Error :" + e);
@@ -49,11 +49,11 @@ public class BookService {
 			// this statement can cause the JsonParsingException error
 			JsonObject inputJSONObj = jsonReader.readObject();
 			
-			int slotsTaken = inputJSONObj.getInt("slots_taken");
-			int uid = inputJSONObj.getInt("fk_user_id");
-			int tid = inputJSONObj.getInt("fk_tour_id");
-			int pid = inputJSONObj.getInt("fk_payment_id");
-			double price = inputJSONObj.getInt("price");
+			Integer slotsTaken = inputJSONObj.getInt("slots_taken");
+			Integer uid = inputJSONObj.getInt("fk_user_id");
+			Integer tid = inputJSONObj.getInt("fk_tour_id");
+			Integer pid = inputJSONObj.getInt("fk_payment_id");
+			Double price = Double.parseDouble(inputJSONObj.getString("price"));
 			
 			if (slotsTaken < 0 || slotsTaken < 5) {
 				return Response
@@ -62,7 +62,8 @@ public class BookService {
 						.build();
 			}
 			
-			rowsAffected = bookDB.insertBooking(slotsTaken, uid, tid, pid, price);
+			BookingDAO bookDB = new BookingDAO();
+			rowsAffected = bookDB.createBooking(slotsTaken, uid, tid, pid, price);
 			jsonOutput = "{\"rows affected\" : \"" + rowsAffected + "\"" + "}";
 			
 		} catch (JsonParsingException e) {
@@ -90,7 +91,7 @@ public class BookService {
 		}
 		
 		return Response
-				.status(Response.Status.OK)
+				.status(Response.Status.CREATED)
 				.entity(jsonOutput)
 				.build();
 	}

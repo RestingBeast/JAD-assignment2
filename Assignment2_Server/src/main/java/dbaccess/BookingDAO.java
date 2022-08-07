@@ -12,7 +12,7 @@ public class BookingDAO {
 		return bookArr;
 	}
 	
-	public int insertBooking(int slots, int uid, int tid, int pid, double price) {
+	public int createBooking(int slots, int uid, int tid, int pid, double price) {
 		Connection conn = null;
 		int rowsAffected = -1;
 		
@@ -21,7 +21,8 @@ public class BookingDAO {
 			String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
 			conn = DriverManager.getConnection(connURL);
 			
-			String sqlStr = "INSERT INTO booking (slots_taken, fk_user_id, fk_tour_id, fk_payment_id, price) VALUES (?, ?, ?, ?)";
+			String sqlStr = "INSERT INTO booking (slots_taken, fk_user_id, fk_tour_id, fk_payment_id, price) "
+					+ "VALUES (?, ?, ?, ?, ?)";
 			PreparedStatement ps = conn.prepareStatement(sqlStr);
 			
 			ps.setInt(1, slots);
