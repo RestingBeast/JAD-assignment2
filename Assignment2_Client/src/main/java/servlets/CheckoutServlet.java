@@ -120,7 +120,7 @@ public class CheckoutServlet extends HttpServlet {
 		
 		if(resp.getStatus() == Response.Status.CREATED.getStatusCode()) {
 			System.out.println("Success");
-			response.sendRedirect("/Assignment2_Client/pages/checkout.jsp");
+			response.sendRedirect("/Assignment2_Client/pages/index.jsp");
 		} else {
 			System.out.println("Failure");
 			response.sendRedirect("/Assignment2_Client/pages/checkout.jsp?errCode=failed");
