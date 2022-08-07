@@ -66,7 +66,6 @@ public class CartServlet extends HttpServlet {
 	protected void doGet_Add(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		
 		String tid = request.getParameter("id");
 		
 		try {
@@ -200,6 +199,7 @@ public class CartServlet extends HttpServlet {
 		}
 		return -1;
 	}
+	
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */

@@ -12,15 +12,10 @@
 	<link
 		href="https://fonts.googleapis.com/css?family=Barlow+Condensed:200,300,400,400i,500,600,700,800,900%7CSatisfy&display=swap"
 		rel="stylesheet">
-	<style>
-		.debugBox {
-			border: 1px solid red;
-			padding: 1em;
-		}
-	</style>
 </head>
 <body>
 	<% 	
+		String userId = (String)session.getAttribute("sessUserID");
 		String error = (String) session.getAttribute("error");
 		ArrayList<Tour> cart =  (ArrayList<Tour>) session.getAttribute("cart"); 
 		ArrayList<Integer> slots = (ArrayList<Integer>) session.getAttribute("slotsArr");
@@ -73,9 +68,13 @@
 					<div class="col-md-2">
 						<h3 class="text-dark" style="font-family: sans-serif;">Total Price</h3>
 					</div>
-					<div class="col-md-2 text-justify">
-						<button class="btn btn-success" onClick="window.location.href='checkout.jsp'">Checkout</button>
-					</div>
+					<% if (userId == null || userId.equals("")) { %>
+							<a href="login.jsp">Login </a> to checkout!
+					<% }  else { %>
+						<div class="col-md-2 text-justify">
+							<button class="btn btn-success" onClick="window.location.href='checkout.jsp'">Checkout</button>
+						</div>
+					<% } %>
 				</div>
 				<% for(int i = 0; i < cart.size(); i++) { %>
 					<div class="row my-2">

@@ -1,4 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="classes.*" %>
+<%@ page import="java.util.*" %>
+<%@ page import="javax.ws.rs.client.Client, javax.ws.rs.client.ClientBuilder, javax.ws.rs.core.GenericType,
+ 	javax.ws.rs.client.Invocation, javax.ws.rs.client.WebTarget, javax.ws.rs.core.Response, javax.ws.rs.core.MediaType" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,6 +14,54 @@
 	<link href="../css/style.css" rel="stylesheet" />
 </head>
 <body>
+<%
+	String userId = (String) session.getAttribute("sessUserID");
+	
+	if (userId == null || userId.equals("")){
+		response.sendRedirect("./error/401.html");
+		return;
+	}
+	
+	Client client = ClientBuilder.newClient();
+	String restUrl = "http://localhost:8080/Assignment2_Server/UserService";
+	WebTarget target = client
+			.target(restUrl)
+			.path("getUser")
+			.queryParam("userid", userId);
+	Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+	Response resp = invocationBuilder.get();
+	
+	if (resp.getStatus() == Response.Status.OK.getStatusCode()) {
+		System.out.println("success");
+		
+		User user = resp.readEntity(User.class);
+		request.setAttribute("user", user);
+		
+		if (user == null) {			
+			request.setAttribute("error", "UserNotFound");
+			response.sendRedirect("./error/401.html");
+			return;
+		}
+	} else {
+		request.setAttribute("error", "NotFound");
+		response.sendRedirect("./error/401.html");
+		return;
+	}
+%>
+
+<% 
+	List<Tour> cart = (List<Tour>) session.getAttribute("cart");
+	List<Integer> slotsArr = (List<Integer>) session.getAttribute("slotsArr");
+	
+	if (cart == null || slotsArr == null) {
+		response.sendRedirect("cart.jsp");
+		return;
+	}
+	
+	User user = (User) request.getAttribute("user");
+	
+	double total = 0;
+%>
 <div class="wrapper">
 	<%@ include file="./components/header.jsp" %>
 		
@@ -30,26 +82,35 @@
 		    <div class="col-md-4 order-md-2 mb-4">
 		      <h4 class="d-flex justify-content-between align-items-center mb-3">
 		        <span class="text-muted">Your cart</span>
-		        <span class="badge badge-secondary badge-pill">3</span>
+		        <span class="badge badge-secondary badge-pill"><%=cart.size()%></span>
 		      </h4>
 		      <ul class="list-group mb-3">
-		        <li class="list-group-item d-flex justify-content-between lh-condensed">
+		      <% for (int i = 0; i < cart.size(); i++) { %>
+		      	<% 
+		      		double bookingPrice = cart.get(i).getPrice() * slotsArr.get(i); 
+		      		total += bookingPrice;
+		      	%>
+		      	
+		      	<li class="list-group-item d-flex justify-content-between lh-condensed">
 		          <div>
-		            <h6 class="my-0">Product name</h6>
-		            <small class="text-muted">Brief description</small>
+		            <h6 class="my-0"><%=cart.get(i).getName()%></h6>
+		            <small class="text-muted">$<%=cart.get(i).getPrice()%></small>
 		          </div>
-		          <span class="text-muted">$12</span>
+		          <span class="text-muted"><%=slotsArr.get(i)%></span>
+		          <span class="text-muted">$<%=bookingPrice%></span>
 		        </li>
+		      <% } %>
+		      
 		        <li class="list-group-item d-flex justify-content-between">
-		          <span>Total (USD)</span>
-		          <strong>$20</strong>
+		          <span>Total (SGD)</span>
+		          <strong>$<%=total%></strong>
 		        </li>
 		      </ul>
 		    </div>
 		    
 		    <div class="col-md-8 order-md-1">
 		      <h4 class="mb-3">Billing address</h4>
-		      <form class="needs-validation" novalidate>
+		      <form action="/Assignment2_Client/booking&userid=<%=user.getUserId()%>" class="needs-validation" novalidate>
 		        <div class="row">
 		          <div class="col-md-6 mb-3">
 		            <label for="firstName">First name</label>
@@ -73,13 +134,15 @@
 		            <div class="input-group-prepend">
 		              <span class="input-group-text">@</span>
 		            </div>
-		            <input type="text" class="form-control" id="username" placeholder="Username" disabled>
+		            <input type="text" class="form-control" id="username" 
+		            	value="<%=user.getUsername()%>" placeholder="Username" disabled>
 		          </div>
 		        </div>
 		
 		        <div class="mb-3">
 		          <label for="email">Email <span class="text-muted">(Optional)</span></label>
-		          <input type="email" class="form-control" id="email" placeholder="you@example.com" disabled>
+		          <input type="email" class="form-control" id="email" 
+		          	value="<%=user.getEmail()%>" placeholder="you@example.com" disabled>
 		        </div>
 		
 		        <div class="mb-3">
