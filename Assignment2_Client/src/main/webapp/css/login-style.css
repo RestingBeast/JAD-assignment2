@@ -35,6 +35,10 @@ p {
   padding: 0 60px;
 }
 
+#upload-form{
+	padding: 0 60px;
+}
+
 input {
   display: block;
   box-sizing: border-box;

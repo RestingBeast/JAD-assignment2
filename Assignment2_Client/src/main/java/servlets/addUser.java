@@ -33,6 +33,7 @@ public class addUser extends HttpServlet {
 		String username = request.getParameter("username");
 		String email = request.getParameter("email");
 		String pwd = request.getParameter("password");
+		String pic_url = request.getParameter("pic_url");
 		
 		System.out.println(username);
 		System.out.println(email);
@@ -49,13 +50,14 @@ public class addUser extends HttpServlet {
 			   Connection conn = DriverManager.getConnection(connURL); 
 			        
 			   // Step 4: Create a query string
-			   String sqlStr = "INSERT INTO user (username, email, password, role) VALUES (?, ?, ?, 'Member')";
+			   String sqlStr = "INSERT INTO user (username, email, password, role, profile_pic_url) VALUES (?, ?, ?, 'Member', ?)";
 			        
 			   // Step 5: Execute SQL Command
 			   PreparedStatement ps = conn.prepareStatement(sqlStr);
 			   ps.setString(1, username);
 			   ps.setString(2, email);
 			   ps.setString(3, pwd);
+			   ps.setString(4, pic_url);
 			   int numRowsAffected = ps.executeUpdate();
 			   
 			   // Step 6: Process Result		        

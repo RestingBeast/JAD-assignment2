@@ -13,9 +13,26 @@
 <body>
 	<div class="page-wrapper">
 		<%@ include file="./components/header.jsp" %>
-	
+		<% 
+			String picture = request.getParameter("picture");
+			System.out.println(picture);
+		%>
+
 		<div id="login-form-wrap">
-      	<h2>Register for <img src="../images/loader.png" width = "30" class="main-logo" alt="Awesome Image" />tripo</h2>
+		<h2>Register for <img src="../images/loader.png" width = "30" class="main-logo" alt="Awesome Image" />tripo</h2>
+			<form id="upload-form" method="post" action="/Assignment2_Client/FileUploadServlet?action=user" enctype="multipart/form-data" >
+				<p class="col-md-6">
+						<input
+					        type="file"
+					        id="picture"
+					        name="picture"
+				         />
+					</p>	
+					<p class="col-md-2">
+					<input type="submit"  value="Upload" />
+					</p>		
+			</form>
+		
       <form id="login-form" action="/Assignment1/servlets/AddUser" method="post">
         <p>
         <input
@@ -44,6 +61,23 @@
             required
           />
         </p>
+        <%
+        	if (picture != null){
+        %>
+        	<p>
+	        <input
+	            type="text"
+	            id="pic_url"
+	            name="picture"
+	            placeholder="pic_url"
+	            value="<%=picture %>"
+	            readonly
+	          />
+	        </p>
+        <%		
+        	}
+        %>
+        
         <%
         	if (request.getParameter("errCode") != null && request.getParameter("errCode").equals("failed")){
         		out.print("<p> <label style=\"color: red\">Failed to register an account.</label></p>");
