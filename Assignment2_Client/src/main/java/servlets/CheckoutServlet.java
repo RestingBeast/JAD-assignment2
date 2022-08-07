@@ -47,39 +47,10 @@ public class CheckoutServlet extends HttpServlet {
 
 			if (action == null) {
 				createPayment(request, response);
-				getPaymentId(request, response);
 				createBooking(request, response);
 			}
 		} catch (Exception e) {
 			System.out.print("Exception: " + e.getMessage());
-		}
-	}
-	
-	protected void getPaymentId(HttpServletRequest request, HttpServletResponse response) {
-		HttpSession session = request.getSession(true);
-		
-		String userId = (String)session.getAttribute("sessUserID");
-		
-		Client client = ClientBuilder.newClient();
-		String restUrl = "http://localhost:8080/Assignment2_Server/PaymentInfoService";
-		WebTarget target = client
-				.target(restUrl)
-				.path("findPaymentById")
-				.queryParam("userid", userId);
-		Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
-		Response resp = invocationBuilder.get();
-		System.out.println("Status: " + resp.getStatus());
-		
-		if (resp.getStatus() == Response.Status.OK.getStatusCode()) {
-			System.out.println("success");
-			
-			PaymentInfo payment = resp.readEntity(PaymentInfo.class);
-				
-			request.setAttribute("payment", payment);
-		} else {
-			System.out.println("failed");
-			
-			request.setAttribute("error", "NotFound");
 		}
 	}
 	
@@ -149,6 +120,7 @@ public class CheckoutServlet extends HttpServlet {
 		
 		if(resp.getStatus() == Response.Status.CREATED.getStatusCode()) {
 			System.out.println("Success");
+			response.sendRedirect("/Assignment2_Client/pages/index.jsp");
 		} else {
 			System.out.println("Failure");
 			response.sendRedirect("/Assignment2_Client/pages/checkout.jsp?errCode=failed");
@@ -168,7 +140,7 @@ public class CheckoutServlet extends HttpServlet {
 		
 		List<Tour> cart = (List<Tour>) session.getAttribute("cart");
 		List<Integer> slotsArr = (List<Integer>) session.getAttribute("slotsArr");
-		PaymentInfo payment = (PaymentInfo) request.getAttribute("payment");
+		PaymentInfo payment = (PaymentInfo) session.getAttribute("payment");
 		
 		if (cart == null || slotsArr == null) {
 			response.sendRedirect("cart.jsp");
@@ -180,7 +152,6 @@ public class CheckoutServlet extends HttpServlet {
 			int userid = Integer.parseInt(userId);
 			int tourid = cart.get(i).getId();
 			int paymentid = payment.getId();
-			System.out.println(paymentid);
 			double bookingPrice = cart.get(i).getPrice() * slotsArr.get(i); 
 			String priceStr = "" + bookingPrice;
 			
