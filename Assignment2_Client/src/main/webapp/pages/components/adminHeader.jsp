@@ -32,7 +32,7 @@
 					<li>
 						<a href="./managetours.jsp">Tours</a>
 						<ul>
-								<li><a href="#">Best Selling</a></li>
+								<li><a href="./bestsellingtours.jsp">Best Selling</a></li>
 								<li><a href="#">Slots Availability</a></li>
 						</ul>
 					</li>

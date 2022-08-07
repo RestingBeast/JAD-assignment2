@@ -1,6 +1,6 @@
 package classes;
 
-public class BestSellingTour {
+public class BookedTours {
 	private int tourid;
 	private String tour;
 	private String brief_desc;
@@ -9,11 +9,11 @@ public class BestSellingTour {
 	private int categoryid;
 	private String pic_url;
 	
-	public BestSellingTour() {
+	public BookedTours() {
 		
 	}
 	
-	public BestSellingTour(int tourid, String tour, String brief_desc, double totalSale, int slotsAvailable,
+	public BookedTours(int tourid, String tour, String brief_desc, double totalSale, int slotsAvailable,
 			int categoryid, String pic_url) {
 		super();
 		this.tourid = tourid;

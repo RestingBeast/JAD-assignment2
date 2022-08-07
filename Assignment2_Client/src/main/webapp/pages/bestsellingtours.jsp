@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import = "classes.BestSellingTour, java.sql.*, java.util.ArrayList" %>
+<%@ page import = "classes.BookedTours,java.sql.*,java.util.ArrayList" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,43 +11,43 @@
 </head>
 <body>
 	<%
-		ArrayList<BestSellingTour> tours = new ArrayList<BestSellingTour>();
-		BestSellingTour t = null;
-		Connection conn = null;
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");	
-			String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
-			conn = DriverManager.getConnection(connURL);
-			String sqlStr = "SELECT t.tourid, t.tour, t.brief_desc, ROUND(t.price * (t.slots - b.slots_taken) , 2) AS total_sale,"
-				    + "t.slots - b.slots_taken AS slots_available, t.fk_category_id, t.tour_pic_url	FROM tour AS t,	booking AS b WHERE "
-				    + "t.tourid = b.fk_tour_id";
-			PreparedStatement ps = conn.prepareStatement(sqlStr);
-			ResultSet rs = ps.executeQuery();
-			
-			while (rs.next()) {
-				t = new BestSellingTour();			
-				t.setTourid(rs.getInt("tourid"));
-				t.setTour(rs.getString("tour"));
-				t.setBrief_desc(rs.getString("brief_desc"));
-				t.setTotalSale(rs.getDouble("total_sale"));
-				t.setSlotsAvailable(rs.getInt("slots_available"));
-				t.setCategoryid(rs.getInt("fk_category_id"));
-				t.setPic_url(rs.getString("tour_pic_url"));
-				
-				tours.add(t);
-			}
-		} catch(Exception e) {
-			System.out.println("Exception: " + e);
-		} finally{
+	ArrayList<BookedTours> tours = new ArrayList<BookedTours>();
+			BookedTours t = null;
+			Connection conn = null;
 			try {
-				if (conn != null) {
-					conn.close();
-				}
-			}
-			catch(Exception e) {
-				System.out.println("Closing error :" + e);
+		Class.forName("com.mysql.cj.jdbc.Driver");	
+		String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
+		conn = DriverManager.getConnection(connURL);
+		String sqlStr = "SELECT t.tourid, t.tour, t.brief_desc, ROUND(b.price , 2) AS total_sale,"
+			    + "t.slots - b.slots_taken AS slots_available, t.fk_category_id, t.tour_pic_url	FROM tour AS t,	booking AS b WHERE "
+			    + "t.tourid = b.fk_tour_id ORDER BY b.price DESC";
+		PreparedStatement ps = conn.prepareStatement(sqlStr);
+		ResultSet rs = ps.executeQuery();
+		
+		while (rs.next()) {
+			t = new BookedTours();			
+			t.setTourid(rs.getInt("tourid"));
+			t.setTour(rs.getString("tour"));
+			t.setBrief_desc(rs.getString("brief_desc"));
+			t.setTotalSale(rs.getDouble("total_sale"));
+			t.setSlotsAvailable(rs.getInt("slots_available"));
+			t.setCategoryid(rs.getInt("fk_category_id"));
+			t.setPic_url(rs.getString("tour_pic_url"));
+			
+			tours.add(t);
+		}
+			} catch(Exception e) {
+		System.out.println("Exception: " + e);
+			} finally{
+		try {
+			if (conn != null) {
+				conn.close();
 			}
 		}
+		catch(Exception e) {
+			System.out.println("Closing error :" + e);
+		}
+			}
 	%>
 
 	<div class="page-wrapper">
@@ -86,13 +86,11 @@
 						<div class="col-lg-4 col-md-6">
 							<div class="tour-one__single">
 								<div class="tour-one__image">
-									<img src="../images/tour/category-<%=tours.get(i).getCategoryid()%>.jpg"
+									<img src="../images/tour/<%=tours.get(i).getPic_url()%>"
 										alt="">
 								</div><!-- /.tour-one__image -->
 								<div class="tour-one__content">
-									<h3><a href="#">
-											No.<%=i+1%>: <%=tours.get(i).getTour()%>
-									</a></h3>
+									<h3>No.<%=i+1%>: <%=tours.get(i).getTour()%></h3>
 									<ul class="tour-one__meta list-unstyled">
 										<li>Total Sale: <%= String.format("%.2f", tours.get(i).getTotalSale()) %><br /></li>
 										<li>Slots Left: <%=tours.get(i).getSlotsAvailable() %></li>
