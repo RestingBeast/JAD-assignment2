@@ -64,12 +64,12 @@
 						<div class="tour-sidebar">
 						    <div class="tour-sidebar__search tour-sidebar__single">
 						        <h3>Book This Tour</h3>
-						        <form action="<%=request.getContextPath()%>/addReview" class="tour-sidebar__search-form">
+						        <form action="<%=request.getContextPath()%>/cart?&action=buy&id=<%= tour.getId() %>" method="post" class="tour-sidebar__search-form">
 						            <div class="input-group">
-						                <input type="number" placeholder="Slots" min="1" max=<%= tour.getSlots() %>>
+						                <input type="number" name="slots" placeholder="Slots" min="1" max=<%= tour.getSlots() %>>
 						            </div><!-- /.input-group -->
 						            <div class="input-group">
-						                <button type="submit" class="thm-btn">Book Now</button>
+						                <input type="submit" class="thm-btn" value="Book Now" />
 						            </div><!-- /.input-group -->
 						        </form>
 						    </div><!-- /.tour-sidebar__search -->

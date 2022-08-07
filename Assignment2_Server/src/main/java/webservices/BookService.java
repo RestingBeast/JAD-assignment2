@@ -8,62 +8,60 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.stream.JsonParsingException;
 import javax.ws.rs.*;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import dbaccess.Review;
-import dbaccess.ReviewDAO;
+import dbaccess.*;
 
-@Path("/ReviewService")
-public class ReviewService {
-	ReviewDAO db = new ReviewDAO();
+public class BookService {
+	TourDAO tourDB = new TourDAO();
+	BookingDAO bookDB = new BookingDAO();
 	
 	@GET
-	@Path("/getReviewsByTour")
+	@Path("/getAll")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response listReviewsByTour(int tour_id) {
-		ArrayList<Review> reviewArr = new ArrayList<>();
+	public Response listAllBookings() {
+		ArrayList<Booking> bookArr = new ArrayList<>();
+		
 		try {
-			reviewArr = db.getReviewsByTour(tour_id);
+			bookArr = bookDB.listAllBookings();
 		} catch (Exception e) {
 			System.out.println("Error :" + e);
 		}
 		
 		return Response
 				.status(Response.Status.OK)
-				.entity(reviewArr)
-				.build();	
+				.entity(bookArr)
+				.build();	 
 	}
 	
 	@PUT
-	@Path("/createReview")
+	@Path("/createBooking")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response createReview(String review) {
+	public Response createBooking(String inputData) {
 		int rowsAffected = -1;
 		String jsonOutput = "";
 
 		try {
-			JsonReader jsonReader = Json.createReader(new StringReader(review));
+			JsonReader jsonReader = Json.createReader(new StringReader(inputData));
 			
 			// this statement can cause the JsonParsingException error
 			JsonObject inputJSONObj = jsonReader.readObject();
 			
-			
+			int slotsTaken = inputJSONObj.getInt("slots_taken");
 			int uid = inputJSONObj.getInt("fk_user_id");
 			int tid = inputJSONObj.getInt("fk_tour_id");
-			int rating = inputJSONObj.getInt("rating");
-			String reviewDesc = inputJSONObj.getString("review_desc");
+			double price = inputJSONObj.getInt("price");
 			
-			if (rating < 0 || rating < 5) {
+			if (slotsTaken < 0 || slotsTaken < 5) {
 				return Response
 						.status(Response.Status.BAD_REQUEST)
 						.entity("{\"error\" : \"bad rating data\"}")
 						.build();
 			}
 			
-			rowsAffected = db.insertReview(uid, tid, rating, reviewDesc);
+			rowsAffected = bookDB.insertBooking(slotsTaken, uid, tid, price);
 			jsonOutput = "{\"rows affected\" : \"" + rowsAffected + "\"" + "}";
 			
 		} catch (JsonParsingException e) {
@@ -96,4 +94,3 @@ public class ReviewService {
 				.build();
 	}
 }
-
