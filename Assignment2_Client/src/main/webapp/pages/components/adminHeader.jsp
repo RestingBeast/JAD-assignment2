@@ -34,6 +34,7 @@
 						<ul>
 								<li><a href="./bestsellingtours.jsp">Best Selling</a></li>
 								<li><a href="./lowslotsavailability.jsp">Slots Availability</a></li>
+								<li><a href="./searchtour.jsp">Search Tour</a></li>
 						</ul>
 					</li>
 					<li>

@@ -1,6 +1,9 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,10 +15,13 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.jose4j.json.internal.json_simple.JSONObject;
+
+import classes.Tour;
 
 /**
  * Servlet implementation class TourServlet
@@ -47,6 +53,8 @@ public class TourServlet extends HttpServlet {
 					updateTour(request, response);
 				} else if (action.equalsIgnoreCase("delete")) {
 					deleteTour(request, response);
+				} else if (action.equalsIgnoreCase("search")) {
+					searchTour(request, response);
 				}
 			}
 		} catch (Exception e) {
@@ -206,6 +214,42 @@ public class TourServlet extends HttpServlet {
 		}
 	}
 
+	protected void searchTour(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		HttpSession session = request.getSession(true);
+		
+		String userId = (String)session.getAttribute("sessUserID");
+		String role = (String)session.getAttribute("sessRole");
+		System.out.println(userId + role);
+		if (role == null || !role.equals("Admin")){
+			response.sendRedirect("/Assignment2_Client/pages/error/401.html");
+			return;
+		}
+		
+		String tour = request.getParameter("tour");
+		
+		Client client = ClientBuilder.newClient();
+		String restUrl = "http://localhost:8080/Assignment2_Server/TourService";
+		WebTarget target = client
+				.target(restUrl)
+				.path("searchTour")
+				.queryParam("name", tour);
+		
+		Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+		Response resp = invocationBuilder.get();
+		System.out.println("Status :" + resp.getStatus());
+		
+		if(resp.getStatus() == Response.Status.OK.getStatusCode()) {
+			System.out.println("Success");
+			ArrayList<Tour> tours = resp.readEntity(new GenericType<ArrayList<Tour>>() {});
+			session.setAttribute("tourArray", tours);
+			response.sendRedirect("./pages/searchtour.jsp");
+		} else {
+			System.out.println("Failure");
+			request.setAttribute("err", "NotFound");
+			response.sendRedirect("./pages/searchtour.jsp");
+		}
+	}
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
