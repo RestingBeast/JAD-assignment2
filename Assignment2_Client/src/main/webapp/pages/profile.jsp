@@ -40,6 +40,16 @@
 	              </a>
 	              <a
 	                class="nav-link"
+	                id="userinfo-tab"
+	                data-toggle="pill"
+	                href="#userinfo"
+	                role="tab"
+	              >
+	                <i class="text-center mr-1"></i>
+	                User Information
+	              </a> 
+	              <a
+	                class="nav-link"
 	                id="booked-tours"
 	                data-toggle="pill"
 	                href="#booked"
@@ -58,7 +68,7 @@
 	                <i class="text-center mr-1"></i>
 	                Past Tours
 	              </a>
-	              
+	                  
 	              <%
 	              	out.println("<a " +
 	    	                "class=\"nav-link\"" +
@@ -106,6 +116,47 @@
 	                      type="password"
 	                      class="form-control"
 	                      placeholder="New Password"
+	                    />
+	                  </div>
+	                </div>
+	              </div>
+	              <div>
+	                <button class="btn btn-primary">Update</button>
+	                <button class="btn btn-light">Cancel</button>
+	              </div>
+	            </div>
+	            <div class="tab-pane fade" id="userinfo" role="tabpanel">
+	              <h3 class="mb-4">User Information</h3>
+	              <div class="row">
+	                <div class="col-md-6">
+	                  <div class="form-group">
+	                    <label>FullName</label>
+	                    <input type="text" class="form-control" value="Kiran" />
+	                  </div>
+	                </div>
+	                <div class="col-md-6">
+	                  <div class="form-group">
+	                    <label>Phone</label>
+	                    <input type="text" class="form-control" value="83569865" />
+	                  </div>
+	                </div>
+	                <div class="col-md-6">
+	                  <div class="form-group">
+	                    <label>Residential Address</label>
+	                    <input
+	                      type="text"
+	                      class="form-control"
+	                      value="Jurong East"
+	                    />
+	                  </div>
+	                </div>
+	                <div class="col-md-6">
+	                  <div class="form-group">
+	                    <label>ZIP Code</label>
+	                    <input
+	                      type="text"
+	                      class="form-control"
+	                      value="602285"
 	                    />
 	                  </div>
 	                </div>

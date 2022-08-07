@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import = "classes.Tour, classes.TourUtils, classes.CategoryUtils, java.sql.*" %>
+<%@ page import="javax.ws.rs.client.Client, javax.ws.rs.client.ClientBuilder, javax.ws.rs.core.GenericType,
+ 	javax.ws.rs.client.Invocation, javax.ws.rs.client.WebTarget, javax.ws.rs.core.Response, javax.ws.rs.core.MediaType" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,10 +13,25 @@
 </head>
 <body>
 	<%
-		ArrayList<Tour> tourlist = TourUtils.listProducts();
+		ArrayList<Tour> tourlist = new ArrayList<Tour>();
+		Client client = ClientBuilder.newClient();
+		String restUrl = "http://localhost:8080/Assignment2_Server/TourService";
+		WebTarget target = client
+				.target(restUrl)
+				.path("getAllTours");
+		
+		Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+		Response resp = invocationBuilder.get();
+		System.out.println("Status :" + resp.getStatus());
+		
+		if(resp.getStatus() == Response.Status.OK.getStatusCode()) {
+			System.out.println("Success");
+			tourlist = resp.readEntity(new GenericType<ArrayList<Tour>>() {});
+		}
 	%>
+
 	<div class="page-wrapper">
-		<%@ include file="./components/header.jsp" %>
+		<%@ include file="./components/adminHeader.jsp" %>
 		<%
 			String userId = (String)session.getAttribute("sessUserID");
 			String role = (String)session.getAttribute("sessRole");

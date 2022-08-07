@@ -64,7 +64,7 @@
 						<div class="tour-sidebar">
 						    <div class="tour-sidebar__search tour-sidebar__single">
 						        <h3>Book This Tour</h3>
-						        <form action="<%=request.getContextPath()%>/cart?&action=buy&id=<%= tour.getId() %>" method="post" class="tour-sidebar__search-form">
+						        <form action="/Assignment2_Client/cart?&action=buy&id=<%= tour.getId() %>" method="post" class="tour-sidebar__search-form">
 						            <div class="input-group">
 						                <input type="number" name="slots" placeholder="Slots" min="1" max=<%= tour.getSlots() %>>
 						            </div><!-- /.input-group -->
