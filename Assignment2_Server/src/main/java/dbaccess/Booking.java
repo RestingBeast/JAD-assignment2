@@ -5,13 +5,15 @@ public class Booking {
 	private int slotsTaken;
 	private int userid;
 	private int tourid;
+	private int paymentid;
 	private double totalPrice;
 	
-	public Booking(int booking_id, int slots_taken, int fk_user_id, int fk_tour_id, double price) {
+	public Booking(int booking_id, int slots_taken, int fk_user_id, int fk_tour_id, int fk_payment_id, double price) {
 		booking_id = bId;
 		slots_taken = slotsTaken;
 		fk_user_id = userid;
 		fk_tour_id = tourid;
+		fk_payment_id = paymentid;
 		price = totalPrice;
 	}
 
@@ -47,6 +49,14 @@ public class Booking {
 		this.tourid = tourid;
 	}
 
+	public int getPaymentid() {
+		return paymentid;
+	}
+
+	public void setPaymentid(int paymentid) {
+		this.paymentid = paymentid;
+	}
+	
 	public double getTotalPrice() {
 		return totalPrice;
 	}

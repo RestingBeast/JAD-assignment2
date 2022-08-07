@@ -13,56 +13,62 @@ import javax.ws.rs.core.Response;
 
 import dbaccess.*;
 
-public class BookService {
-	TourDAO tourDB = new TourDAO();
-	BookingDAO bookDB = new BookingDAO();
+public class PaymentService {
+	PaymentInfoDAO paymentDB = new PaymentInfoDAO();
 	
 	@GET
 	@Path("/getAll")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response listAllBookings() {
-		ArrayList<Booking> bookArr = new ArrayList<>();
+	public Response listAllPayments() {
+		ArrayList<PaymentInfo> paymentArr = new ArrayList<>();
 		
 		try {
-			bookArr = bookDB.listAllBookings();
+			paymentArr = paymentDB.listAllPayments();
 		} catch (Exception e) {
 			System.out.println("Error :" + e);
 		}
 		
 		return Response
 				.status(Response.Status.OK)
-				.entity(bookArr)
+				.entity(paymentArr)
 				.build();	 
 	}
 	
 	@PUT
-	@Path("/createBooking")
+	@Path("/createPayment")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response createBooking(String inputData) {
+	public Response createPayment(String inputData) {
 		int rowsAffected = -1;
 		String jsonOutput = "";
 
 		try {
 			JsonReader jsonReader = Json.createReader(new StringReader(inputData));
 			
-			// this statement can cause the JsonParsingException error
 			JsonObject inputJSONObj = jsonReader.readObject();
 			
-			int slotsTaken = inputJSONObj.getInt("slots_taken");
 			int uid = inputJSONObj.getInt("fk_user_id");
-			int tid = inputJSONObj.getInt("fk_tour_id");
-			int pid = inputJSONObj.getInt("fk_payment_id");
-			double price = inputJSONObj.getInt("price");
+			String name = inputJSONObj.getString("full_name");
+			String number = inputJSONObj.getString("phone_number");
+			String address = inputJSONObj.getString("address");
+			String zip = inputJSONObj.getString("zip");
+			double price = Double.parseDouble(inputJSONObj.getString("payment"));
 			
-			if (slotsTaken < 0 || slotsTaken < 5) {
+			if (number.length() < 8 ) {
 				return Response
 						.status(Response.Status.BAD_REQUEST)
-						.entity("{\"error\" : \"bad rating data\"}")
+						.entity("{\"error\" : \"bad number data\"}")
 						.build();
 			}
 			
-			rowsAffected = bookDB.insertBooking(slotsTaken, uid, tid, pid, price);
+			if (zip.length() < 6) {
+				return Response
+						.status(Response.Status.BAD_REQUEST)
+						.entity("{\"error\" : \"bad zip data\"}")
+						.build();
+			}
+			
+			rowsAffected = paymentDB.insertPayment(uid, name, number, address, zip, price);
 			jsonOutput = "{\"rows affected\" : \"" + rowsAffected + "\"" + "}";
 			
 		} catch (JsonParsingException e) {
@@ -74,7 +80,7 @@ public class BookService {
 					.build();
 			
 		} catch (NullPointerException e) {
-			String someError = "{" + "\"error\" : \"bad input date\"," + "\"details\" : \"" + 
+			String someError = "{" + "\"error\" : \"bad input data\"," + "\"details\" : \"" + 
 								e.toString().replace("java.lang.NullPointerException: ", "") + "}";
 			
 			return Response
