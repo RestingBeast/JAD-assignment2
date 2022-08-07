@@ -1,5 +1,6 @@
 package servlets;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -53,7 +54,7 @@ public class FileUploadServlet extends HttpServlet {
 			    if (tourid != 0) {
 			    	url += "&tourid=" + tourid;
 			    }
-			} catch (Exception e) {
+			} catch (FileNotFoundException e) {
 				if (tourid != 0) {
 			    	url += "?tourid=" + tourid;
 			    }
