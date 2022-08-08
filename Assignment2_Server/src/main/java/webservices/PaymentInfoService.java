@@ -18,6 +18,8 @@ import javax.ws.rs.core.Response;
 
 import dbaccess.PaymentInfo;
 import dbaccess.PaymentInfoDAO;
+import dbaccess.Tour;
+import dbaccess.TourDAO;
 
 @Path("/PaymentInfoService")
 public class PaymentInfoService {
@@ -123,6 +125,24 @@ public class PaymentInfoService {
 		return Response
 				.status(Response.Status.OK)
 				.entity(pInfos)
+				.build();
+	}
+	
+	@GET
+	@Path("/findPaymentById")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findTourById(@QueryParam("userid") String useridStr) {
+		PaymentInfo p = new PaymentInfo();
+		int userid = Integer.parseInt(useridStr);
+		try {
+			PaymentInfoDAO pb = new PaymentInfoDAO();
+			p = pb.findById(userid);
+		} catch(Exception e) {
+			System.out.println("Exception: " + e);
+		}
+		return Response
+				.status(Response.Status.OK)
+				.entity(p)
 				.build();
 	}
 }

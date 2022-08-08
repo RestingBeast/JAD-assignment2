@@ -72,7 +72,7 @@ public class PaymentInfoDAO {
 			if (rs.next()) {
 				u = new PaymentInfo();
 		
-				u.setId(rs.getInt("id"));
+				u.setId(rs.getInt("payment_id"));
 				u.setUserid(rs.getInt("fk_user_id"));
 				u.setFullname(rs.getString("full_name"));
 				u.setPhone(rs.getString("phone_number"));
@@ -163,7 +163,6 @@ public class PaymentInfoDAO {
 			ps.setDouble(6, price);
 			
 			rowsAffected = ps.executeUpdate();
-			System.out.println(rowsAffected);
 		}  catch (Exception e) {
 			System.out.print("Exception: " + e);
 		} finally {
