@@ -42,6 +42,23 @@ public class PaymentInfoService {
 				.build();	 
 	}
 	
+	@GET
+	@Path("/findPayment")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPayment() {
+		PaymentInfo paymentInfo = new PaymentInfo();
+		try {
+			PaymentInfoDAO db = new PaymentInfoDAO();
+			paymentInfo = db.findPayment();
+		} catch(Exception e) {
+			System.out.println("Exception : " + e);
+		}
+		return Response
+				.status(Response.Status.OK)
+				.entity(paymentInfo)
+				.build();
+	}
+	
 	@PUT
 	@Path("/createPayment")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -78,7 +95,6 @@ public class PaymentInfoService {
 			
 			PaymentInfoDAO paymentDB = new PaymentInfoDAO();
 			rowsAffected = paymentDB.createPayment(uid, name, number, address, zip, price);
-			System.out.println(rowsAffected);
 			jsonOutput = "{\"rows affected\" : \"" + rowsAffected + "\"" + "}";
 			
 		} catch (JsonParsingException e) {

@@ -51,34 +51,32 @@ public class PaymentInfoDAO {
 		return payments;
 	}
 	
-	public PaymentInfo findById(int userid) {
-		PaymentInfo u = null;
+	public PaymentInfo findPayment() {
+		PaymentInfo p = null;
 		Connection conn = null;
 		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			
+
 			String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
 			
 			conn = DriverManager.getConnection(connURL);
 			
-			String sqlStr = "SELECT * FROM payment WHERE fk_user_id = ?";
+			String sqlStr = "SELECT * FROM payment ORDER BY created_at DESC LIMIT 1";
 			
 			PreparedStatement ps = conn.prepareStatement(sqlStr);
-			ps.setInt(1, userid);
-			
 			ResultSet rs = ps.executeQuery();
 			
 			if (rs.next()) {
-				u = new PaymentInfo();
+				p = new PaymentInfo();
 		
-				u.setId(rs.getInt("payment_id"));
-				u.setUserid(rs.getInt("fk_user_id"));
-				u.setFullname(rs.getString("full_name"));
-				u.setPhone(rs.getString("phone_number"));
-				u.setZip(rs.getString("zip"));
-				u.setAddress(rs.getString("address"));
-				u.setPayment(rs.getDouble("payment"));
+				p.setId(rs.getInt("payment_id"));
+				p.setUserid(rs.getInt("fk_user_id"));
+				p.setFullname(rs.getString("full_name"));
+				p.setPhone(rs.getString("phone_number"));
+				p.setZip(rs.getString("zip"));
+				p.setAddress(rs.getString("address"));
+				p.setPayment(rs.getDouble("payment"));
 			}
 		} catch (Exception e) {
 			System.out.print("Exception: " + e);
@@ -92,7 +90,52 @@ public class PaymentInfoDAO {
 				System.out.println("Closing error :" + e);
 			}
 		}
-		return u;
+		
+		return p;
+	}
+	
+	public PaymentInfo findById(int userid) {
+		PaymentInfo p = null;
+		Connection conn = null;
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
+			
+			conn = DriverManager.getConnection(connURL);
+			
+			String sqlStr = "SELECT * FROM payment WHERE fk_user_id = ?";
+			
+			PreparedStatement ps = conn.prepareStatement(sqlStr);
+			ps.setInt(1, userid);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if (rs.next()) {
+				p = new PaymentInfo();
+				
+				p.setId(rs.getInt("payment_id"));
+				p.setUserid(rs.getInt("fk_user_id"));
+				p.setFullname(rs.getString("full_name"));
+				p.setPhone(rs.getString("phone_number"));
+				p.setZip(rs.getString("zip"));
+				p.setAddress(rs.getString("address"));
+				p.setPayment(rs.getDouble("payment"));
+			}
+		} catch (Exception e) {
+			System.out.print("Exception: " + e);
+		} finally {
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			}
+			catch(Exception e) {
+				System.out.println("Closing error :" + e);
+			}
+		}
+		return p;
 	}
 	
 	public ArrayList<PaymentInfo> findByAddress(String address) {

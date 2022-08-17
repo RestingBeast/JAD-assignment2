@@ -47,7 +47,7 @@ public class CheckoutServlet extends HttpServlet {
 
 			if (action == null) {
 				createPayment(request, response);
-				createBooking(request, response);
+				setPayment(request, response);
 			}
 		} catch (Exception e) {
 			System.out.print("Exception: " + e.getMessage());
@@ -119,14 +119,12 @@ public class CheckoutServlet extends HttpServlet {
 		System.out.println("Status: " + resp.getStatus());
 		
 		if(resp.getStatus() == Response.Status.CREATED.getStatusCode()) {
-			System.out.println("Success");
-			response.sendRedirect("/Assignment2_Client/pages/index.jsp");
+			System.out.println("Success for Creation of Payment");
 		} else {
-			System.out.println("Failure");
+			System.out.println("Failure for Creation of Payment");
 			response.sendRedirect("/Assignment2_Client/pages/checkout.jsp?errCode=failed");
 		}
-	}
-	
+	}	
 	
 	protected void createBooking(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
@@ -140,7 +138,7 @@ public class CheckoutServlet extends HttpServlet {
 		
 		List<Tour> cart = (List<Tour>) session.getAttribute("cart");
 		List<Integer> slotsArr = (List<Integer>) session.getAttribute("slotsArr");
-		PaymentInfo payment = (PaymentInfo) session.getAttribute("payment");
+		PaymentInfo payment = (PaymentInfo) request.getAttribute("payment");
 		
 		if (cart == null || slotsArr == null) {
 			response.sendRedirect("cart.jsp");
@@ -148,12 +146,21 @@ public class CheckoutServlet extends HttpServlet {
 		}
 		
 		for (int i = 0; i < cart.size(); i++) {
-			int slots = slotsArr.get(i);
-			int userid = Integer.parseInt(userId);
-			int tourid = cart.get(i).getId();
-			int paymentid = payment.getId();
+			Integer slots = slotsArr.get(i);
+			Integer userid = 0;
+			Integer tourid = cart.get(i).getId();
+			Integer paymentid = payment.getId();
 			double bookingPrice = cart.get(i).getPrice() * slotsArr.get(i); 
 			String priceStr = "" + bookingPrice;
+			double price = 0;
+			
+			try {
+				price = Double.parseDouble(priceStr);
+				userid = Integer.parseInt(userId);
+			} catch (NumberFormatException e) {
+				response.sendRedirect("/Assignment2_Client/pages/checkout.jsp?errCode=invalidField");
+				return;
+			}
 			
 			JSONObject bookJSON = new JSONObject();
 			bookJSON.put("slots_taken", slots);
@@ -163,7 +170,7 @@ public class CheckoutServlet extends HttpServlet {
 			bookJSON.put("price", priceStr);
 			
 			Client client = ClientBuilder.newClient();
-			String restUrl = "http://localhost:8080/Assignment2_Server/BookService";
+			String restUrl = "http://localhost:8080/Assignment2_Server/BookingService";
 			WebTarget target = client
 					.target(restUrl)
 					.path("createBooking");
@@ -173,14 +180,48 @@ public class CheckoutServlet extends HttpServlet {
 			System.out.println("Status :" + resp.getStatus());
 			
 			if(resp.getStatus() == Response.Status.CREATED.getStatusCode()) {
-				System.out.println("Success");
+				System.out.println("Success for Creation of Booking");
+				response.sendRedirect("/Assignment2_Client/pages/index.jsp");
 			} else {
-				System.out.println("Failure");
+				System.out.println("Failure for Creation of Booking");
 				response.sendRedirect("/Assignment2_Client/pages/checkout.jsp?errCode=failed");
 			}
 		}
 	}
 	
+	
+	protected void setPayment(HttpServletRequest request, HttpServletResponse response) 
+		throws ServletException, IOException {
+		HttpSession session = request.getSession(true);
+		
+		String userId = (String)session.getAttribute("sessUserID");
+		if (userId == null || userId.equals("")){
+			response.sendRedirect("./error/401.html");
+			return;
+		}
+		
+		Client client = ClientBuilder.newClient();
+		String restUrl = "http://localhost:8080/Assignment2_Server/PaymentInfoService";
+		WebTarget target = client
+				.target(restUrl)
+				.path("findPayment");
+		
+		Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+		Response resp = invocationBuilder.get();
+		System.out.println("Status: " + resp.getStatus());
+		
+		if(resp.getStatus() == Response.Status.OK.getStatusCode()) {
+			System.out.println("Success for Retrieval of Payment");
+			
+			PaymentInfo paymentInfo = resp.readEntity(PaymentInfo.class);
+			request.setAttribute("payment", paymentInfo);
+			createBooking(request, response);
+		} else {
+			System.out.println("Failure for Retrieval of Payment");
+			response.sendRedirect("/Assignment2_Client/pages/checkout.jsp?errCode=failed");
+		}
+		
+	}
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */

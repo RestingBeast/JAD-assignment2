@@ -13,7 +13,7 @@ import javax.ws.rs.core.Response;
 
 import dbaccess.*;
 
-public class BookService {
+public class BookingService {
 	TourDAO tourDB = new TourDAO();
 	
 	@GET
@@ -54,14 +54,7 @@ public class BookService {
 			Integer tid = inputJSONObj.getInt("fk_tour_id");
 			Integer pid = inputJSONObj.getInt("fk_payment_id");
 			Double price = Double.parseDouble(inputJSONObj.getString("price"));
-			
-			if (slotsTaken < 0 || slotsTaken < 5) {
-				return Response
-						.status(Response.Status.BAD_REQUEST)
-						.entity("{\"error\" : \"bad rating data\"}")
-						.build();
-			}
-			
+
 			BookingDAO bookDB = new BookingDAO();
 			rowsAffected = bookDB.createBooking(slotsTaken, uid, tid, pid, price);
 			jsonOutput = "{\"rows affected\" : \"" + rowsAffected + "\"" + "}";
