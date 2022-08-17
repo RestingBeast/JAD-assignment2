@@ -19,6 +19,14 @@
 	<%	
 		int tid = Integer.parseInt(request.getParameter("tourid"));
 		Tour tour = TourUtils.getTour(tid);
+		
+		String userId = (String)session.getAttribute("sessUserID");
+		String role = (String)session.getAttribute("sessRole");
+		System.out.println(userId + role);
+		
+		
+		double count = 0;
+		double total = 0;
 	%>
 	
 	<div class="page-wrapper">
@@ -88,51 +96,81 @@
 						</div><!-- /.tour-sidebar -->
                     </div><!-- /.col-lg-4 -->
                 </div><!-- /.row -->
+                
+                
                 <div class="row">
                 	<div class="col-lg-12">
                 		<div class="tour-details__spacer"></div><!-- /.tour-details__spacer -->
 						<h3 class="tour-details__title">Reviews Scores</h3><!-- /.tour-details__title -->
 						<div class="tour-details__review-score">
-						    <div class="tour-details__review-score-ave">
-						        <div class="my-auto">
-						            <h3>7.0</h3>
-						            <p><i class="fa fa-star"></i> Super</p>
-						        </div><!-- /.my-auto -->
-						    </div><!-- /.tour-details__review-score-ave -->
-						    <div class="tour-details__review-score__content">
-						        <div class="tour-details__review-score__bar">
-						            <div class="tour-details__review-score__bar-top">
-						                <h3><i class="fa fa-star"></i></h3>
-						                <p>50%</p>
-						            </div><!-- /.tour-details__review-score__bar-top -->
-						        </div><!-- /.tour-details__review-score__bar -->
-						    </div><!-- /.tour-details__review-score__content -->
-						</div><!-- /.tour-details__review-score -->
+								    <div class="tour-details__review-score-ave">
+								        <div class="my-auto">
+								            <h3>
+									           	<%
+									           	ArrayList<Review> reviewArr = ReviewUtils.getReviewsByTour(tid);
+									           	if (!reviewArr.isEmpty()) {
+													for (Review r: reviewArr) { 
+										        			count++;
+										        			total += r.getRating();
+													}
+													out.print(total/count);
+												%>
+													<p><i class="fa fa-star"></i>
+									            	<%
+									            			if (total/count > 4.5){
+										            			out.print("Super");
+										            		} else if (total/count > 3.0){
+										            			out.print("Decent");
+										            		} else if (total/count < 1.5){
+										            			out.print("Bad");
+										            		}
+									            	%>
+									            	</p>
+												<%
+									           	} else {
+									           		out.print("0 review");
+									           	}
+									           	%>
+								            </h3>
+								        </div><!-- /.my-auto -->
+								    </div><!-- /.tour-details__review-score-ave -->
+								    <div class="tour-details__review-score__content">
+								        <div class="tour-details__review-score__bar">
+								            <div class="tour-details__review-score__bar-top">
+								                <h3><i class="fa fa-star"></i></h3>
+								                <p>50%</p>
+								            </div><!-- /.tour-details__review-score__bar-top -->
+								        </div><!-- /.tour-details__review-score__bar -->
+								    </div><!-- /.tour-details__review-score__content -->
+								</div>
 						        <%
 						        	// @SuppressWarnings("unchecked")
 						        	// ArrayList<Review> reviewArr = (ArrayList<Review>) request.getAttribute("reviewArray");
-						        	ArrayList<Review> reviewArr = ReviewUtils.getReviewsByTour(tour.getId());
 						        %>
-						        	<% if (reviewArr != null) { %>
-						        	<%	for (Review r: reviewArr) { %>
+						        	<% if (reviewArr != null) {
+						        	%>
+						        	<%	for (Review r: reviewArr) { 
+						        			count++;
+						        			total += r.getRating();
+						        			
+						        	%>
 								<div class="tour-details__review-comment">
 								    <div class="tour-details__review-comment-single">
 								        <div class="tour-details__review-comment-top">
 								            <img src="../images/tour/tour-review-1-1.jpg" alt="">
-								            <h3>Mike Hardson</h3>
-								            <p>06 Dec, 2019</p>
+								            <h3><%=r.getUsername()%></h3>
+								            <p><%= r.getCreatedAt()%></p>
 						        		</div><!-- /.tour-details__review-comment-top -->
 						        		
 						        		<div class="tour-details__review-comment-content">
-								            <h3>Fun Was To Discover This</h3>
-								            <p><%= r.getReviewDesc() %></p>
+								            <h3><%= r.getReviewDesc()%></h3>
 								        </div><!-- /.tour-details__review-comment-content -->
 								        
 								        <div class="tour-details__review-form-stars">
 								            <div class="row">
 								                <div class="col-md-4">
 								                    <p><span>Rating</span>
-								                        <i class="fa fa-star active"></i>
+								                        <i class="fa fa-star active"><%= r.getRating()%></i>
 								                    </p>
 								                </div><!-- /.col-md-4 -->
 								            </div><!-- /.row -->
@@ -143,24 +181,22 @@
 						        	}
 						        %>
 						
-						<h3 class="tour-details__title">Write a Review</h3><!-- /.tour-details__title -->
+						<%
+							if(userId == null){
+						%>
+							<h3 class="tour-details__title">You must be logged in to write a review.</h3>
+						<%
+							} else {
+						%>
+							<h3 class="tour-details__title">Write a Review</h3><!-- /.tour-details__title -->
 						<div class="tour-details__review-form">
                                 <div class="tour-details__review-form-stars">
                                     <form action="<%=request.getContextPath()%>/addReview" class="contact-one__form">
-                                        <div class="row low-gutters">
-                                            <div class="col-md-6">
-                                                <div class="input-group">
-                                                    <input type="text" name="name" placeholder="Your Name">
-                                                </div><!-- /.input-group -->
-                                            </div><!-- /.col-md-6 -->
-                                            <div class="col-md-6">
-                                                <div class="input-group">
-                                                    <input type="text" name="email" placeholder="Email Address">
-                                                </div><!-- /.input-group -->
-                                            </div><!-- /.col-md-6 -->
                                             <div class="col-md-12">
+                                            	<input type="hidden" name="fk_user_id" value=<%=userId %> />
+                                            	<input type="hidden" name="fk_tour_id" value=<%=tid %> />
                                                 <div class="input-group">
-                                                    <input type="text" name="rating" placeholder="Rating">
+                                                    <input type="text" name="rating" placeholder="Rating" required>
                                                 </div><!-- /.input-group -->
                                             </div><!-- /.col-md-12 -->
                                             <div class="col-md-12">
@@ -168,10 +204,29 @@
                                                     <textarea name="message" placeholder="Write Message"></textarea>
                                                 </div><!-- /.input-group -->
                                             </div><!-- /.col-md-12 -->
+                                            <%
+                                            	String errCode = request.getParameter("err");
+                                            	if (errCode != null){
+                                            %>
+                                            	 <div class="col-md-12" style="color: red;">
+                                            	 <p>
+                                            <%
+                                            		if (errCode.equals("InvalidRating")){
+                                            			out.print("Invalid Rating! Rating must be greater than 0 and less than 5.");
+                                            		}
+                                            		if(errCode.equals("Notfound")){
+                                            			out.print("failed to create review");
+                                            		}
+                                            %>
+                                            	</p>
+                                            	</div>
+                                            <%
+												}	
+                                            %>
                                             <div class="col-md-12">
                                                 <div class="input-group">
-                                                    <button type="submit" class="thm-btn contact-one__btn">Submit a
-                                                        review</button>
+                                                    <button type="submit" class="thm-btn contact-one__btn">
+                                                    Submit a review</button>
                                                     <!-- /.thm-btn contact-one__btn -->
                                                 </div><!-- /.input-group -->
                                             </div><!-- /.col-md-12 -->
@@ -179,6 +234,9 @@
                                     </form>
                                 </div><!-- /.tour-details__review-form -->
                             </div><!-- /.tour-details__content -->
+						<%
+							}
+						%>
                 	</div>
                 </div>
             </div><!-- /.container -->
