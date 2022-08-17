@@ -15,7 +15,10 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.jose4j.json.internal.json_simple.JSONObject;
 
 /**
  * Servlet implementation class addReview
@@ -36,55 +39,47 @@ public class addReview extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Integer uid = Integer.parseInt(request.getParameter("fk_user_id"));
-		Integer tid = Integer.parseInt(request.getParameter("fk_tour_id"));
-		Integer rid = Integer.parseInt(request.getParameter("review_id"));
+
+		String uidStr = request.getParameter("fk_user_id");
+		String tidStr = request.getParameter("fk_tour_id");
+		String ratingStr = request.getParameter("rating");
+		String message = request.getParameter("message");
 		
-		Review review = new Review();
-		review.setTourid(tid);
-		review.setUserid(uid);
-		review.setId(rid);
+		JSONObject reviewJSON = new JSONObject();
+		Integer rating = 0, uid = 0, tid = 0;
 		
 		try {
-			Integer rating = Integer.parseInt(request.getParameter("rating"));
+			rating = Integer.parseInt(ratingStr);
+			uid = Integer.parseInt(uidStr);
+			tid = Integer.parseInt(tidStr);
 			
-			review.setRating(rating);
 			
 		} catch (NumberFormatException e) {
-			request.setAttribute("err", "Invalid Rating");
+			response.sendRedirect("http://localhost:8080/Assignment2_Client/pages/tour-details.jsp?tourid=" + tidStr + "&err=InvalidRating");
+			return;
 		}
 		
-		String reviewDesc = request.getParameter("review_desc");
+		reviewJSON.put("fk_user_id", uid);
+		reviewJSON.put("fk_tour_id", tid);
+		reviewJSON.put("rating", rating);
+		reviewJSON.put("review_desc", message);
 		
-		if (reviewDesc == null) {
-			request.setAttribute("err", "Invalid Review Message");
-			
-			review.setReviewDesc(reviewDesc);
-		}
 		
 		Client client = ClientBuilder.newClient();
 		String restUrl = "http://localhost:8080/Assignment2_Server/ReviewService";
 		WebTarget target = client
 				.target(restUrl)
 				.path("createReview");
-		Invocation.Builder invocationBuilder = target.request();
-		Response resp = invocationBuilder.put(Entity.json(review));
-		System.out.println("Status: " + resp.getStatus());
+		Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+		Response resp = invocationBuilder.put(Entity.entity(reviewJSON, MediaType.APPLICATION_JSON));
 		
 		if (resp.getStatus() == Response.Status.OK.getStatusCode()) {
 			System.out.println("success");
-			Integer row = resp.readEntity(Integer.class);
-			
-			request.setAttribute("rowsAffected", row);
+			response.sendRedirect("http://localhost:8080/Assignment2_Client/pages/tour-details.jsp?tourid=" + tidStr);
 		} else {
 			System.out.println("failed");
-			
-			request.setAttribute("err", "NotFound");
+			response.sendRedirect("http://localhost:8080/Assignment2_Client/pages/tour-details.jsp?tourid=" + tidStr + "&err=Notfound");
 		}
-		
-		String url = "index.jsp";
-		RequestDispatcher rd = request.getRequestDispatcher(url);
-		rd.forward(request, response);
 	}
 
 	/**

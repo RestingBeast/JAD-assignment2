@@ -6,14 +6,20 @@ public class Review {
 	private int tourid;
 	private String ReviewDesc;
 	private int Rating;
+	private String username;
+	private String createdAt;
 	
-	public Review(int id, int userid, int tourid, String reviewDesc, int rating) {
+	public Review(int id, int userid, int tourid, String reviewDesc, int rating, String username, String createdAt) {
 		super();
-		
+		this.id = id;
+		this.userid = userid;
+		this.tourid = tourid;
 		ReviewDesc = reviewDesc;
 		Rating = rating;
+		this.username = username;
+		this.createdAt = createdAt;
 	}
-	
+
 	public Review() {
 		super();
 	}
@@ -57,6 +63,20 @@ public class Review {
 	public void setRating(int rating) {
 		Rating = rating;
 	}
-	
-	
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(String createdAt) {
+		this.createdAt = createdAt;
+	}
 }

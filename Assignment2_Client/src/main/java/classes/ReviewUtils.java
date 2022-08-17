@@ -24,7 +24,7 @@ public class ReviewUtils {
 			String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
 			conn = DriverManager.getConnection(connURL);
 
-			String sqlStr = "SELECT * FROM reviews WHERE fk_tour_id = ?";
+			String sqlStr = "SELECT r.*, u.username FROM reviews AS r, user AS u WHERE r.fk_user_id = u.userid AND fk_tour_id = ?";
 			
 			PreparedStatement ps = conn.prepareStatement(sqlStr);
 			ps.setInt(1, tid);
@@ -39,6 +39,8 @@ public class ReviewUtils {
 				r.setId(rs.getInt("review_id"));
 				r.setReviewDesc(rs.getString("review_desc"));
 				r.setRating(rs.getInt("rating"));
+				r.setUsername(rs.getString("username"));
+				r.setCreatedAt(rs.getTimestamp("created_at").toString());
 				
 				reviews.add(r);
 			}

@@ -56,7 +56,7 @@ public class ReviewDAO {
 			String connURL = "jdbc:mysql://localhost:3306/assignment1?user=root&password=Root1234-&serverTimezone=UTC";
 			conn = DriverManager.getConnection(connURL);
 			
-			String sqlStr = "INSERT INTO reviews (fk_user_id, fk_tour_id, review_desc, rating) VALUES (?, ?, ?, ?)";
+			String sqlStr = "INSERT INTO reviews (fk_user_id, fk_tour_id, rating, review_desc) VALUES (?, ?, ?, ?)";
 			PreparedStatement ps = conn.prepareStatement(sqlStr);
 			
 			ps.setInt(1, uid);

@@ -56,7 +56,8 @@ public class ReviewService {
 			int rating = inputJSONObj.getInt("rating");
 			String reviewDesc = inputJSONObj.getString("review_desc");
 			
-			if (rating < 0 || rating < 5) {
+			if (rating < 0 || rating > 5) {
+				System.out.print("bad rating data");
 				return Response
 						.status(Response.Status.BAD_REQUEST)
 						.entity("{\"error\" : \"bad rating data\"}")
@@ -68,7 +69,7 @@ public class ReviewService {
 			
 		} catch (JsonParsingException e) {
 			String someError = "{" + "\"error\" : \"bad input data\"" + "}";
-			
+			System.out.print("bad input data");
 			return Response
 					.status(Response.Status.BAD_REQUEST)
 					.entity(someError)
@@ -77,13 +78,14 @@ public class ReviewService {
 		} catch (NullPointerException e) {
 			String someError = "{" + "\"error\" : \"bad input date\"," + "\"details\" : \"" + 
 								e.toString().replace("java.lang.NullPointerException: ", "") + "}";
-			
+			System.out.print("null pointer");
 			return Response
 					.status(Response.Status.BAD_REQUEST)
 					.entity(someError)
 					.build();
 			
 		} catch (Exception e) {
+			System.out.print("exception: " + e);
 			return Response
 					.status(Response.Status.BAD_REQUEST)
 					.entity("{\"error\" : \"" + e.toString() + "\"" + "}")
