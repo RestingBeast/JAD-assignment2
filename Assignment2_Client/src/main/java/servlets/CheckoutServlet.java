@@ -47,7 +47,6 @@ public class CheckoutServlet extends HttpServlet {
 
 			if (action == null) {
 				createPayment(request, response);
-				setPayment(request, response);
 			}
 		} catch (Exception e) {
 			System.out.print("Exception: " + e.getMessage());
@@ -120,6 +119,8 @@ public class CheckoutServlet extends HttpServlet {
 		
 		if(resp.getStatus() == Response.Status.CREATED.getStatusCode()) {
 			System.out.println("Success for Creation of Payment");
+			
+			setPayment(request, response);
 		} else {
 			System.out.println("Failure for Creation of Payment");
 			response.sendRedirect("/Assignment2_Client/pages/checkout.jsp?errCode=failed");
@@ -177,7 +178,7 @@ public class CheckoutServlet extends HttpServlet {
 			
 			Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
 			Response resp = invocationBuilder.put(Entity.entity(bookJSON, MediaType.APPLICATION_JSON));
-			System.out.println("Status :" + resp.getStatus());
+			System.out.println("Status: " + resp.getStatus());
 			
 			if(resp.getStatus() == Response.Status.CREATED.getStatusCode()) {
 				System.out.println("Success for Creation of Booking");
@@ -215,6 +216,7 @@ public class CheckoutServlet extends HttpServlet {
 			
 			PaymentInfo paymentInfo = resp.readEntity(PaymentInfo.class);
 			request.setAttribute("payment", paymentInfo);
+			
 			createBooking(request, response);
 		} else {
 			System.out.println("Failure for Retrieval of Payment");

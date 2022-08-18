@@ -91,7 +91,6 @@
 		      		double bookingPrice = cart.get(i).getPrice() * slotsArr.get(i); 
 		      		total += bookingPrice;
 		      	%>
-		      	
 		      	<li class="list-group-item d-flex justify-content-between lh-condensed">
 		          <div>
 		            <h6 class="my-0"><%=cart.get(i).getName()%></h6>
